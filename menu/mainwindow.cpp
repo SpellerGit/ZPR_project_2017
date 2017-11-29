@@ -26,22 +26,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    qDebug() << "fsfsd";
-
-    QWidget * wdg = new QWidget(this);
-    button1 = new QPushButton("some button",wdg);
-    setCentralWidget(wdg);
-
-    QObject::connect(button1, SIGNAL (released()), this, SLOT (handleButton()));
+    QObject::connect(ui->button1, SIGNAL (released()), this, SLOT (handleButton()));
 
 }
 
 void MainWindow::handleButton()
 {
+    this->hide();
+    gamewindow = new game::GameWindow();
+    gamewindow->show();
     qDebug() << "clicked";
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+     qDebug() << "dstry main";
+     delete gamewindow;
+     delete ui;
 }

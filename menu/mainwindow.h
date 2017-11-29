@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "game/gamewindow.h"
 #include <QMainWindow>
 #include <QPushButton>
 
@@ -19,6 +20,7 @@ private slots:
     void handleButton();
 
 private:
+    game::GameWindow *gamewindow;
     Ui::MainWindow *ui;
     QPushButton *button1;
 };
