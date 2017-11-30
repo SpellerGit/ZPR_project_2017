@@ -21,7 +21,12 @@ private slots:
    void handleExit();
 
 private:
+    bool eventFilter(QObject *target, QEvent *event);
+    QGraphicsScene * scene;
+    QImage image;
+    QImage image2;
     QGraphicsPixmapItem * item;
+    QGraphicsPixmapItem * item2;
     Ui::GameWindow *ui;
 };
 } // namespace game
