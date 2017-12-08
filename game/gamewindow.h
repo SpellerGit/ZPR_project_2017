@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QGraphicsPixmapItem>
-
+#include "game/gamedata.h"
 
 namespace Ui {
 class GameWindow;
@@ -16,17 +16,18 @@ class GameWindow : public QWidget
 public:
     explicit GameWindow(QWidget *parent = 0);
     ~GameWindow();
+    QGraphicsScene * getScenePointer() const;
+    void setData(std::shared_ptr<GameData> gdata);
+    void update();
 
 private slots:
    void handleExit();
 
 private:
+    void showEvent(QShowEvent *);
     bool eventFilter(QObject *target, QEvent *event);
+    std::shared_ptr<GameData> gdata;
     QGraphicsScene * scene;
-    QImage image;
-    QImage image2;
-    QGraphicsPixmapItem * item;
-    QGraphicsPixmapItem * item2;
     Ui::GameWindow *ui;
 };
 } // namespace game
