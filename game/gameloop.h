@@ -4,24 +4,32 @@
 #include <thread>
 #include <functional>
 #include "game/gamedata.h"
+#include "game/gamewindow.h"
 #include <qgraphicsscene.h>
 #include <QRunnable>
 
 namespace game {
 
-//Should this be here btw?
-
-class GameLoop : public QRunnable
+class GameLoop : public QObject
 {
+    Q_OBJECT
 public:
-    GameLoop(std::shared_ptr<GameData> gamedata, std::function<void()> updatecb);
+    GameLoop(std::shared_ptr<GameData> gamedata,
+             GameWindow * gamewindow);
     ~GameLoop();
-    void run();
 
 private:
-    bool running; // is this the way to go? consider this/other ways to do it
+    bool running; //unused
     std::shared_ptr<GameData> data;
-    std::function<void()> updateDisplay;
+    GameWindow * gamewindow;
+    //std::function<void()> updateDisplay;
+
+signals:
+   void mySignal();
+
+private slots:
+   void run();
+
 };
 
 } //namespace game

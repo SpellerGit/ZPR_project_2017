@@ -13,9 +13,7 @@ public:
 //private: for time being public, to be changed
     int posX;
     int posY;
-    int sizeX;
-    int sizeY;
-    QImage thisImage;
+
 };
 
 } //namepsace game

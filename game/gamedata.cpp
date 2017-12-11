@@ -14,7 +14,7 @@ GameData::GameData()
    player->setPixmap(QPixmap::fromImage(image));
    player->posX=0;
    player->posY=0;
-   player->setPos(0,0);
+  // player->setPos(0,0);
 
    QImage image2(":/images/image1.png");
    background = new movingItem();

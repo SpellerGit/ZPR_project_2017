@@ -22,7 +22,7 @@ public:
 
 //private: //public only for early testing/developing
     movingItem * player; //raw pointer because handled as part of scene
-    mapItem * background; //temporary object rather i suppose
+    movingItem * background; //temporary object rather i suppose
     user_action action;
     std::vector<mapItem> items;
    // std::shared_ptr<GameWindow> gwindow;

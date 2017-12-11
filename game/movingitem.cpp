@@ -2,9 +2,9 @@
 
 namespace game {
 
-//movingItem::movingItem()
-//{
+movingItem::movingItem()
+{
 
-//}
+}
 
 } // namespcae game

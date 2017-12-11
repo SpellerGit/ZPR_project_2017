@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "game/gamemanager.h"
 #include <memory>
 #include <QtWidgets>
 #include <QWidget>
@@ -33,14 +34,13 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::handleButton()
 {
     this->hide();
-    gamewindow = new game::GameWindow();
-    gamewindow->show();
+    mngr = std::unique_ptr<game::GameManager>(new game::GameManager());
+    mngr->startGame();
     qDebug() << "clicked";
 }
 
 MainWindow::~MainWindow()
 {
      qDebug() << "dstry main";
-     delete gamewindow;
      delete ui;
 }

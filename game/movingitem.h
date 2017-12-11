@@ -8,7 +8,13 @@ namespace game{
 class movingItem : public mapItem
 {
 public:
-   // movingItem();
+    movingItem();
+    accelerate(int x);
+    jump();
+
+private:
+    int speedX;
+    int speedY;
 };
 
 } // namespcae game

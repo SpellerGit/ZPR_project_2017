@@ -18,7 +18,9 @@ public:
     ~GameWindow();
     QGraphicsScene * getScenePointer() const;
     void setData(std::shared_ptr<GameData> gdata);
-    void update();
+
+public slots:
+   void updateDisplay();
 
 private slots:
    void handleExit();

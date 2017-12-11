@@ -10,10 +10,11 @@ class GameManager
 {
 public:
     ~GameManager();
-    void startGame(); //change this static maybe? or no? or just make dis singleton?
+    void startGame();
 
 private:
-    std::shared_ptr<GameWindow> gamewindow;
+    //std::shared_ptr<GameWindow> gamewindow;
+    GameWindow * gamewindow;
     std::shared_ptr<GameData> gamedata;
    // std::unique_ptr<GameLoop> loop;
     GameLoop * loop;
