@@ -12,21 +12,25 @@ enum user_action {
         MOVE_LEFT,
         MOVE_RIGHT,
         JUMP,
-        SHOOT
+        SHOOT,
+        IDLE
 };
 
 class GameData
 {
 public:
     GameData();
+    void setShootingPos(int x, int y);
+    void addBullet();
 
 //private: //public only for early testing/developing
     movingItem * player; //raw pointer because handled as part of scene
-    movingItem * background; //temporary object rather i suppose
+    movingItem * background;
     user_action action;
-    std::vector<mapItem> items;
-   // std::shared_ptr<GameWindow> gwindow;
-    //also some map object here i recon
+    movingItem * bullet;
+
+    int shootPointX;
+    int shootPointY;
 
 };
 

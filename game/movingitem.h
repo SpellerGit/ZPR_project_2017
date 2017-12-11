@@ -9,8 +9,13 @@ class movingItem : public mapItem
 {
 public:
     movingItem();
-    accelerate(int x);
-    jump();
+    movingItem(int speedx,
+               int speedy,
+               int posx,
+               int posy);
+    void accelerate(int accelerate_value);
+    void jump();
+    void move();
 
 private:
     int speedX;

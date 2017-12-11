@@ -26,23 +26,42 @@ void GameLoop::run()
         switch(data->action)
         {
             case MOVE_LEFT:
-                data->player->posX--;
+                data->player->accelerate(-5);
                 break;
             case MOVE_RIGHT:
-                data->player->posX++;
+                data->player->accelerate(5);
                 break;
             case JUMP:
+                data->player->jump();
                 break;
             case SHOOT:
                 break;
             default:
                 break;
         }
+
+        handleMovement();
+
+        data->action = IDLE;
         emit mySignal();
-
-
 }
 
+void GameLoop::handleMovement()
+{
+    //do this for each moving object?
+    //Also check for collisions, here or in move method?
+    data->player->move();
+
+
+    if(data->bullet)
+    data->bullet->move();
+
+
+    //delete objects if they go too far, like:
+    //if(i->posX>10000 || i->posX<0 || i->posY>10000 || i->posY<0)
+    // erase i
+
+}
 
 GameLoop::~GameLoop()
 {

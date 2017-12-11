@@ -29,6 +29,14 @@ void GameWindow::updateDisplay()
      qDebug() <<"update display on window";
      gdata->player->setPos(gdata->player->posX,gdata->player->posY);
 
+     if(gdata->bullet!=nullptr)
+     gdata->bullet->setPos(gdata->bullet->posX,gdata->bullet->posY);
+
+     /*Potentially this way we might try to keep many bullet*/
+     /*for (int i=0; i<gdata->items.size(); i++ )
+     {
+          gdata->items[i].setPos(gdata->items[i].posX,gdata->items[i].posY);
+     }*/
 }
 
 QGraphicsScene * GameWindow::getScenePointer() const
@@ -60,7 +68,12 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
         {
         case QEvent::GraphicsSceneMousePress:
         {
-
+            QGraphicsSceneMouseEvent* me = static_cast<QGraphicsSceneMouseEvent*>(event);
+            const QPointF position = me->pos();
+            gdata->setShootingPos(position.x(),position.y()); //should this be here?
+            gdata->addBullet();
+            scene->addItem(gdata->bullet);
+            return true;
         }
         case QEvent::GraphicsSceneMouseMove:
         {
@@ -76,6 +89,9 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                      break;
                 case Qt::Key_D:
                      gdata->action = MOVE_RIGHT;
+                     break;
+                case Qt::Key_W:
+                     gdata->action = JUMP;
                      break;
                 default:
                      break;

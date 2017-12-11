@@ -19,10 +19,9 @@ public:
     ~GameLoop();
 
 private:
-    bool running; //unused
     std::shared_ptr<GameData> data;
     GameWindow * gamewindow;
-    //std::function<void()> updateDisplay;
+    void handleMovement();
 
 signals:
    void mySignal();
