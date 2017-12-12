@@ -26,6 +26,8 @@ GameWindow::GameWindow(QWidget *parent) :
 
 void GameWindow::updateDisplay()
 {
+     checkCollisions(); //not so clean looking doing it here i suppose
+
      qDebug() <<"update display on window";
      gdata->player->setPos(gdata->player->posX,gdata->player->posY);
 
@@ -37,6 +39,30 @@ void GameWindow::updateDisplay()
      {
           gdata->items[i].setPos(gdata->items[i].posX,gdata->items[i].posY);
      }*/
+}
+
+void GameWindow::checkCollisions()
+{
+     //what if there are multiple collisions?
+     //only collision in y axis for now
+     //also make it look cleaner in future
+    auto itemCollidingPlayer = scene->collidingItems(gdata->player);
+    if(!itemCollidingPlayer.empty())
+    {
+        for(auto i : itemCollidingPlayer)
+        {
+            if (i == gdata->tile)
+            {
+                gdata->player->speedY=0;
+                gdata->player->posY=
+                        i->y()-gdata->player->boundingRect().height()+1;
+                //Why is there +1? Because if we dont add+1, then in next frame there will not be any
+                //collisions detected, and player will go down again, then collision will be detected and player
+                //will go back up. In other words player would oscilate up and down.
+
+            }
+        }
+    }
 }
 
 QGraphicsScene * GameWindow::getScenePointer() const
@@ -52,6 +78,8 @@ void GameWindow::setData(std::shared_ptr<GameData> gamedata)
         qDebug() <<"nullptr";
     scene->addItem(gdata->background);
     scene->addItem(gdata->player);
+    scene->addItem(gdata->tile);
+    gdata->tile->setPos(gdata->tile->posX,gdata->tile->posY); //where should we do this?
 }
 
 void GameWindow::showEvent(QShowEvent *)
@@ -69,7 +97,7 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
         case QEvent::GraphicsSceneMousePress:
         {
             QGraphicsSceneMouseEvent* me = static_cast<QGraphicsSceneMouseEvent*>(event);
-            const QPointF position = me->pos();
+            const QPointF position = me->scenePos();
             gdata->setShootingPos(position.x(),position.y()); //should this be here?
             gdata->addBullet();
             scene->addItem(gdata->bullet);
@@ -90,7 +118,7 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                 case Qt::Key_D:
                      gdata->action = MOVE_RIGHT;
                      break;
-                case Qt::Key_W:
+                case Qt::Key_Space:
                      gdata->action = JUMP;
                      break;
                 default:

@@ -13,16 +13,20 @@ GameData::GameData()
    QImage image(":/images/image3.png");
    player = new movingItem();
    player->setPixmap(QPixmap::fromImage(image));
-   player->posX=100;
+   player->posX=500;
    player->posY=500;
-  // player->setPos(0,0);
 
-   QImage image2(":/images/image1.png");
+   QImage image2(":/images/background1.bmp");
    background = new movingItem();
    background->setPixmap(QPixmap::fromImage(image2));
-    //TODO create map factory class, create iitem factory
 
-    action = IDLE; //delete this when default values are handled... or smth
+   QImage image3(":/images/tile1.bmp");
+   tile = new mapItem();
+   tile->setPixmap(QPixmap::fromImage(image3));
+   tile->posX=485;
+   tile->posY=600;
+
+   action = IDLE; //delete this when default values are handled... or smth
 
     bullet = nullptr;
 }
@@ -39,16 +43,23 @@ void GameData::addBullet() //first prototype version, must get much more customi
     if(bullet)
         delete bullet;
 
+    int tempx=1;
+    int tempy=1;
 
-    qDebug() << "addBullet";
+    if(shootPointX-player->posX<0)
+        tempx=-1;
+
+    if(shootPointY-player->posY<0)
+        tempy=-1;
 
     float diffX = abs(shootPointX-player->posX);
-    float diffY = abs(shootPointY-player->posY);
+    float diffY = abs(shootPointY-player->posY); //can user break the game when he presses on himself?
+                                                 //we would get zero division maybe we should handle this error
 
     float ratio = diffX/(diffX+diffY); //i am doing this to get angle at which the bullet is shot
 
-    float speedx = ratio*100;
-    float speedy = (ratio-1)*100;
+    float speedx = ratio*100 * tempx;
+    float speedy = (1-ratio)*100 * tempy;
 
     qDebug() << "diffX " <<diffX;
     qDebug() << "diffY " <<diffY;

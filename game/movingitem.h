@@ -17,7 +17,7 @@ public:
     void jump();
     void move();
 
-private:
+//private: (make it public) TODO checking collisions changes speed, handle it nicer (in function)
     int speedX;
     int speedY;
 };

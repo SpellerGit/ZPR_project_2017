@@ -28,6 +28,8 @@ public:
     movingItem * background;
     user_action action;
     movingItem * bullet;
+    mapItem * tile; //temporary, for testing
+
 
     int shootPointX;
     int shootPointY;

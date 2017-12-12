@@ -26,6 +26,7 @@ private slots:
    void handleExit();
 
 private:
+    void checkCollisions();
     void showEvent(QShowEvent *);
     bool eventFilter(QObject *target, QEvent *event);
     std::shared_ptr<GameData> gdata;
