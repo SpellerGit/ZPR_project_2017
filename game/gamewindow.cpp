@@ -31,8 +31,14 @@ void GameWindow::updateDisplay()
      qDebug() <<"update display on window";
      gdata->player->setPos(gdata->player->posX,gdata->player->posY);
 
-     if(gdata->bullet!=nullptr)
-     gdata->bullet->setPos(gdata->bullet->posX,gdata->bullet->posY);
+    // if(gdata->bullet!=nullptr)
+    // gdata->bullet->setPos(gdata->bullet->posX,gdata->bullet->posY);
+
+     if(!gdata->bullets.empty())
+         for(auto &i : gdata->bullets)
+         {
+             i->setPos(i->posX,i->posY);
+         }
 
      /*Potentially this way we might try to keep many bullet*/
      /*for (int i=0; i<gdata->items.size(); i++ )
@@ -47,18 +53,39 @@ void GameWindow::checkCollisions()
      //only collision in y axis for now
      //also make it look cleaner in future
     auto itemCollidingPlayer = scene->collidingItems(gdata->player);
+
+    if(gdata->player->speedY>0)
     if(!itemCollidingPlayer.empty())
     {
         for(auto i : itemCollidingPlayer)
         {
-            if (i == gdata->tile)
+            if (i != gdata->background)
             {
+                if(gdata->player->y()+gdata->player->boundingRect().height()>i->y()
+                        && gdata->player->y()+gdata->player->boundingRect().height()<i->y()+40)
+                {
                 gdata->player->speedY=0;
                 gdata->player->posY=
                         i->y()-gdata->player->boundingRect().height()+1;
                 //Why is there +1? Because if we dont add+1, then in next frame there will not be any
                 //collisions detected, and player will go down again, then collision will be detected and player
                 //will go back up. In other words player would oscilate up and down.
+                }
+                else if(gdata->player->x()<i->x())
+                {
+                gdata->player->speedX=0;
+                gdata->player->posX=
+                        i->x()-gdata->player->boundingRect().width();
+                qDebug() <<"collision x RIGHT";
+                }
+                else if(gdata->player->x()>i->x())
+                {
+                qDebug() <<"collision x LEFT";
+                gdata->player->speedX=0;
+                gdata->player->posX=
+                        i->x()+i->boundingRect().width();
+                }
+
 
             }
         }
@@ -78,8 +105,12 @@ void GameWindow::setData(std::shared_ptr<GameData> gamedata)
         qDebug() <<"nullptr";
     scene->addItem(gdata->background);
     scene->addItem(gdata->player);
-    scene->addItem(gdata->tile);
-    gdata->tile->setPos(gdata->tile->posX,gdata->tile->posY); //where should we do this?
+
+    for(auto &i : gdata->tiles)
+    {
+    scene->addItem(i);
+    i->setPos(i->posX,i->posY);
+    }
 }
 
 void GameWindow::showEvent(QShowEvent *)
@@ -89,7 +120,7 @@ void GameWindow::showEvent(QShowEvent *)
 
 bool GameWindow::eventFilter(QObject *target, QEvent *event)
 {
- qDebug() << event->type();
+// qDebug() << event->type();
     if (target == scene)
       {
         switch (event->type()) //formating......
@@ -98,9 +129,11 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
         {
             QGraphicsSceneMouseEvent* me = static_cast<QGraphicsSceneMouseEvent*>(event);
             const QPointF position = me->scenePos();
-            gdata->setShootingPos(position.x(),position.y()); //should this be here?
-            gdata->addBullet();
-            scene->addItem(gdata->bullet);
+            //movingItem * bullet = new movingItem();
+            movingItem * bullet = gdata->addBullet(position.x(),position.y()); //shoudl this be here
+            scene->addItem(bullet);
+            bullet->setPos(gdata->player->posX,gdata->player->posY);
+            gdata->bullets.push_back(bullet);
             return true;
         }
         case QEvent::GraphicsSceneMouseMove:

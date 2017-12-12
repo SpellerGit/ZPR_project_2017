@@ -20,16 +20,15 @@ class GameData
 {
 public:
     GameData();
-    void setShootingPos(int x, int y);
-    void addBullet();
+    movingItem* addBullet(int x,
+                          int y);
 
 //private: //public only for early testing/developing
     movingItem * player; //raw pointer because handled as part of scene
     movingItem * background;
     user_action action;
-    movingItem * bullet;
-    mapItem * tile; //temporary, for testing
-
+    std::vector<mapItem*> tiles; //temporary, for testing
+    std::vector<movingItem*> bullets;
 
     int shootPointX;
     int shootPointY;

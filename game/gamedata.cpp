@@ -21,27 +21,55 @@ GameData::GameData()
    background->setPixmap(QPixmap::fromImage(image2));
 
    QImage image3(":/images/tile1.bmp");
-   tile = new mapItem();
-   tile->setPixmap(QPixmap::fromImage(image3));
-   tile->posX=485;
-   tile->posY=600;
+  // auto tile = new mapItem();
+  // tile->setPixmap(QPixmap::fromImage(image3));
+  // tile->posX=485;
+  // tile->posY=600;
 
+   int i =0;
+
+
+   //Creating some first test map
+
+   mapItem * tile = new movingItem();
+   tile->setPixmap(QPixmap::fromImage(image3));
+   tile->posX=0;
+   tile->posY=550;
+   tiles.push_back(tile);
+
+   mapItem * tile2 = new movingItem();
+   tile2->setPixmap(QPixmap::fromImage(image3));
+   tile2->posX=600;
+   tile2->posY=550;
+   tiles.push_back(tile2);
+
+   while(true)
+   {
+       mapItem * tile = new movingItem();
+       tile->setPixmap(QPixmap::fromImage(image3));
+       tile->posX=i;
+       tile->posY=600;
+
+       tiles.push_back(tile);
+
+       qDebug() << "Created TILE!";
+
+       i+=50;
+       if(i>600)
+           break;
+   }
+
+   bullets = std::vector<movingItem*>(); //gotta init it somewhere...
    action = IDLE; //delete this when default values are handled... or smth
 
-    bullet = nullptr;
 }
 
-void GameData::setShootingPos(int x, int y)
+movingItem* GameData::addBullet(int shootPointX,
+                                 int shootPointY)
+                                          //first prototype version, must get much more customizable in future
+                                          //Also cleaner
 {
     action = SHOOT;
-    shootPointX = x;
-    shootPointY = y;
-}
-
-void GameData::addBullet() //first prototype version, must get much more customizable in future
-{
-    if(bullet)
-        delete bullet;
 
     int tempx=1;
     int tempy=1;
@@ -58,19 +86,21 @@ void GameData::addBullet() //first prototype version, must get much more customi
 
     float ratio = diffX/(diffX+diffY); //i am doing this to get angle at which the bullet is shot
 
-    float speedx = ratio*100 * tempx;
-    float speedy = (1-ratio)*100 * tempy;
+    float speedx = ratio*75 * tempx;
+    float speedy = (1-ratio)*75 * tempy;
 
-    qDebug() << "diffX " <<diffX;
+  /*  qDebug() << "diffX " <<diffX;
     qDebug() << "diffY " <<diffY;
-    qDebug() << "RATIO " <<ratio;
+    qDebug() << "RATIO " <<ratio;   LOGS
     qDebug() << "speedx " << speedx;
-    qDebug() << "speedy " << speedy;
+    qDebug() << "speedy " << speedy;*/
 
-    bullet = new movingItem((int)speedx,(int)speedy,player->posX,player->posY);
+    movingItem * bullet = new movingItem((int)speedx,(int)speedy,player->posX,player->posY);
 
     QImage image(":/images/bullet.png");
     bullet->setPixmap(QPixmap::fromImage(image));
+
+    return bullet;
 
 }
 
