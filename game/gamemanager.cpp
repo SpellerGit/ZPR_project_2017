@@ -13,9 +13,24 @@ GameManager::~GameManager()
     qDebug() <<"FDGD";
 }
 
-void GameManager::startGame()
+void GameManager::startGame() // its loading test map
 {
-    gamedata = std::shared_ptr<GameData>(new GameData()); // set gamedata? it gotta be created earlier btw
+
+    gamedata = std::shared_ptr<GameData>(new GameData());
+
+    qDebug() << "to make loop";
+    gamewindow = new GameWindow();
+    gamewindow->setData(gamedata);
+
+    loop = new GameLoop(gamedata,gamewindow);
+    gamewindow->show();
+    qDebug() << "to run loop";
+
+}
+
+void GameManager::startGame(std::shared_ptr<game::GameData> gamedata)
+{
+
     qDebug() << "to make loop";
     gamewindow = new GameWindow();
     gamewindow->setData(gamedata);
@@ -24,6 +39,8 @@ void GameManager::startGame()
     gamewindow->show();
     qDebug() << "to run loop";
 }
+
+
 
 
 } // namespace game

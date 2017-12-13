@@ -18,9 +18,11 @@ public:
 
 private slots:
     void handleButton();
+    void handleSelectMap();
 
 private:
     std::unique_ptr<game::GameManager> mngr;
+    std::shared_ptr<game::GameData> gamedata;
     Ui::MainWindow *ui;
     QPushButton *button1;
 };

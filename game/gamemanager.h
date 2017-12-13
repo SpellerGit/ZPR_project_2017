@@ -11,6 +11,8 @@ class GameManager
 public:
     ~GameManager();
     void startGame();
+    void startGame(std::shared_ptr<GameData> gamedata);
+
 
 private:
     //std::shared_ptr<GameWindow> gamewindow;

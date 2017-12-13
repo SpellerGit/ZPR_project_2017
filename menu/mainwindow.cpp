@@ -8,6 +8,7 @@
 #include <QCoreApplication>
 #include <QObject>
 #include <QApplication>
+#include <QString>
 
 //Of memory handling with QT objects, per SO (https://stackoverflow.com/questions/19331396/how-does-qt-delete-objects-and-what-is-the-best-way-to-store-qobjects)
 //The pattern requires that the composite object
@@ -25,9 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    gamedata = nullptr;
+
     ui->setupUi(this);
 
     QObject::connect(ui->button1, SIGNAL (released()), this, SLOT (handleButton()));
+    QObject::connect(ui->button2, SIGNAL (released()), this, SLOT (handleSelectMap()));
+
 
 }
 
@@ -35,8 +40,25 @@ void MainWindow::handleButton()
 {
     this->hide();
     mngr = std::unique_ptr<game::GameManager>(new game::GameManager());
-    mngr->startGame();
-    qDebug() << "clicked";
+    if(gamedata==nullptr)
+    {
+        mngr->startGame();
+    }
+    else
+    {
+        mngr->startGame(gamedata);
+    }
+    qDebug() << "clicked Button1";
+}
+
+void MainWindow::handleSelectMap()
+{
+
+    mngr = std::unique_ptr<game::GameManager>(new game::GameManager());
+    gamedata = std::shared_ptr<game::GameData>(new game::GameData());
+    //selecting map
+    qDebug() << "clicked SelectMap";
+
 }
 
 MainWindow::~MainWindow()
