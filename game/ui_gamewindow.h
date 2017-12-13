@@ -16,6 +16,7 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -23,20 +24,27 @@ QT_BEGIN_NAMESPACE
 class Ui_GameWindow
 {
 public:
-    QGraphicsView *gameView;
+    QVBoxLayout *verticalLayout;
     QPushButton *exitButton;
+    QGraphicsView *gameView;
 
     void setupUi(QWidget *GameWindow)
     {
         if (GameWindow->objectName().isEmpty())
             GameWindow->setObjectName(QStringLiteral("GameWindow"));
-        GameWindow->resize(590, 405);
-        gameView = new QGraphicsView(GameWindow);
-        gameView->setObjectName(QStringLiteral("gameView"));
-        gameView->setGeometry(QRect(20, 50, 551, 331));
+        GameWindow->resize(1850, 850);
+        verticalLayout = new QVBoxLayout(GameWindow);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         exitButton = new QPushButton(GameWindow);
         exitButton->setObjectName(QStringLiteral("exitButton"));
-        exitButton->setGeometry(QRect(0, 0, 581, 41));
+
+        verticalLayout->addWidget(exitButton);
+
+        gameView = new QGraphicsView(GameWindow);
+        gameView->setObjectName(QStringLiteral("gameView"));
+
+        verticalLayout->addWidget(gameView);
+
 
         retranslateUi(GameWindow);
 
