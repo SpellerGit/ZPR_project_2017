@@ -3,6 +3,7 @@
 
 #include <qgraphicsscene.h>
 #include <memory>
+#include <QWidget>
 #include "game/mapitem.h"
 #include "game/movingitem.h"
 
@@ -16,12 +17,14 @@ enum user_action {
         IDLE
 };
 
-class GameData
+class GameData : public QWidget
 {
 public:
     GameData();
-    movingItem* addBullet(int x,
-                          int y);
+
+    void loadmap ();
+    void insertitems ( int const& index, int const & width, int const& height, int size);
+    movingItem* addBullet(int x, int y);
 
 //private: //public only for early testing/developing
     movingItem * player; //raw pointer because handled as part of scene

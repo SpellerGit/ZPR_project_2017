@@ -3,6 +3,10 @@
 #include <QPixmap>
 #include <QDebug>
 #include <math.h>
+#include <QFile>
+#include <QFileDialog>
+#include <QString>
+#include <QMessageBox>
 
 namespace game {
 /* This class will be keeping whole the game data, and
@@ -103,6 +107,49 @@ movingItem* GameData::addBullet(int shootPointX,
     return bullet;
 
 }
+void GameData::insertitems (int const& index, int const & mapWidth, int const& mapHeight, int size)
+{
+
+
+}
+
+void GameData::loadmap()
+{
+        QString fileName = QFileDialog::getOpenFileName(this, "Open the file");
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+            QMessageBox::warning(this,"..","File not opened.");
+            return;
+        }
+        QTextStream in(&file);
+        QString text = in.readAll(); // whole file is saved as one row with \n symbols
+        file.close();
+
+        int mapHeight, mapWidth, itemPositionX, itemPositionY;
+        int index = text.indexOf("\n",0);
+        QString map = text.left(index);
+        index += 1; // moving index to next row. First row purpose is to select bacground
+
+        mapWidth = text.indexOf("\n",index);
+        mapHeight = text.count("\n");
+
+        QString path = ":/images/";
+                path.append("background2.bmp");
+        QImage picture(path);
+        background = new movingItem();
+        background->setPixmap(QPixmap::fromImage(picture));
+
+        insertitems(index,mapWidth,mapHeight, text.length()); // looking for symbols # , $ which represents objects on the map ( there will be more in the future)
+
+
+        qDebug() << mapWidth <<" "<< mapHeight <<" 8%5=" << 8%5;
+
+
+
+}
+
+
+
 
 
 } // namespace game
