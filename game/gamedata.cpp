@@ -14,7 +14,7 @@ GameData::GameData()
    player = new movingItem();
    player->setPixmap(QPixmap::fromImage(image));
    player->posX=500;
-   player->posY=500;
+   player->posY=574;
 
    QImage image2(":/images/background1.bmp");
    background = new movingItem();
@@ -29,7 +29,7 @@ GameData::GameData()
    int i =0;
 
 
-   //Creating some first test map
+   //Creating some first test map, best to ignore this...
 
    mapItem * tile = new movingItem();
    tile->setPixmap(QPixmap::fromImage(image3));
@@ -43,6 +43,30 @@ GameData::GameData()
    tile2->posY=550;
    tiles.push_back(tile2);
 
+   mapItem * tile4 = new movingItem();
+   tile4->setPixmap(QPixmap::fromImage(image3));
+   tile4->posX=650;
+   tile4->posY=550;
+   tiles.push_back(tile4);
+
+   mapItem * tile5 = new movingItem();
+   tile5->setPixmap(QPixmap::fromImage(image3));
+   tile5->posX=700;
+   tile5->posY=550;
+   tiles.push_back(tile5);
+
+   mapItem * tile3 = new movingItem();
+   tile3->setPixmap(QPixmap::fromImage(image3));
+   tile3->posX=0;
+   tile3->posY=650;
+   tiles.push_back(tile3);
+
+
+   mapItem * tile6 = new movingItem();
+   tile6->setPixmap(QPixmap::fromImage(image3));
+   tile6->posX=750;
+   tile6->posY=500;
+   tiles.push_back(tile6);
    while(true)
    {
        mapItem * tile = new movingItem();
@@ -56,6 +80,22 @@ GameData::GameData()
 
        i+=50;
        if(i>600)
+           break;
+   }
+i=0;
+   while(true)
+   {
+       mapItem * tile = new movingItem();
+       tile->setPixmap(QPixmap::fromImage(image3));
+       tile->posX=i;
+       tile->posY=700;
+
+       tiles.push_back(tile);
+
+       qDebug() << "Created TILE!";
+
+       i+=50;
+       if(i>1000)
            break;
    }
 

@@ -26,13 +26,13 @@ void movingItem::accelerate(int accelerate_value)
 
 void movingItem::jump()
 {
-    speedY=-15; //50 temporary value
+    speedY=-10; //50 temporary value
 }
 
 void movingItem:: move()
 {
-    qDebug() <<"speed x is " << speedX;
-    qDebug() <<"speed y is " << speedY;
+  //  qDebug() <<"speed x is " << speedX;
+  //  qDebug() <<"speed y is " << speedY;
 
     posX=posX+speedX;
     posY=posY+speedY;
@@ -46,7 +46,7 @@ void movingItem:: move()
         speedX=speedX-1;
     }
     //if(speedY!=0)
-        speedY=speedY+1; // here, when we can detect collisions we should gain speed down
+        speedY=speedY+2; // here, when we can detect collisions we should gain speed down
                           //until we reach ground (collision is detected)
 }
 

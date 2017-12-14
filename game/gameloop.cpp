@@ -16,7 +16,7 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(run()));
-    timer->start(25);
+    timer->start(40);
     qDebug() << "timer started";
 }
 

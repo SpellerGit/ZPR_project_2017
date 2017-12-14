@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <functional>
 #include <QThreadPool>
-#include <Windows.h>
 
 namespace game {
 
