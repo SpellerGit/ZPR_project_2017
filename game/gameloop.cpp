@@ -5,7 +5,7 @@
 #include <memory>
 #include "game/gamewindow.h"
 
-namespace game {
+namespace game { //TODO change all those numbers in this class to variables
 
 GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
                    GameWindow * gamewindpow_ptr)
@@ -17,19 +17,19 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(run()));
     timer->start(40);
-    qDebug() << "timer started";
 }
 
 void GameLoop::run()
 {
-        qDebug() << "running in loop";
-        switch(data->action)
+    if(!data->actions.empty())
+    for(auto &i : data->actions)
+        switch(*i)
         {
             case MOVE_LEFT:
-                data->player->accelerate(-2);
+                data->player->accelerate(-5);
                 break;
             case MOVE_RIGHT:
-                data->player->accelerate(2);
+                data->player->accelerate(5);
                 break;
             case JUMP:
                 data->player->jump();
@@ -41,15 +41,11 @@ void GameLoop::run()
         }
 
         handleMovement();
-
-        data->action = IDLE;
         emit mySignal();
 }
 
 void GameLoop::handleMovement()
 {
-    //do this for each moving object?
-    //Also check for collisions, here or in move method?
     data->player->move();
 
 

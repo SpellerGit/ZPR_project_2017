@@ -7,21 +7,19 @@ namespace game {
 
 GameManager::~GameManager()
 {
-    delete loop;
-    delete gamewindow;
-    qDebug() <<"FDGD";
+    delete loop;             //How does qt pointers work? Why do we use delete?
+    delete gamewindow;       //investigate qpointers
+
 }
 
 void GameManager::startGame()
 {
-    gamedata = std::shared_ptr<GameData>(new GameData()); // set gamedata? it gotta be created earlier btw
-    qDebug() << "to make loop";
+    gamedata = std::shared_ptr<GameData>(new GameData());
     gamewindow = new GameWindow();
     gamewindow->setData(gamedata);
 
     loop = new GameLoop(gamedata,gamewindow);
     gamewindow->show();
-    qDebug() << "to run loop";
 }
 
 

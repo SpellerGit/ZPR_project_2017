@@ -3,9 +3,10 @@
 
 #include "game/gamewindow.h"
 #include "game/gameloop.h"
+#include "QPointer"
 
 namespace game {
-
+/*Class that is called from menu when game is to begin*/
 class GameManager
 {
 public:
@@ -13,11 +14,9 @@ public:
     void startGame();
 
 private:
-    //std::shared_ptr<GameWindow> gamewindow;
-    GameWindow * gamewindow;
+    QPointer<GameWindow> gamewindow; //regular c++ smart pointers arent working for Q_OBjects
     std::shared_ptr<GameData> gamedata;
-   // std::unique_ptr<GameLoop> loop;
-    GameLoop * loop;
+    GameLoop * loop; //why if we use qpointer it would not work?
 
 };
 

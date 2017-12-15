@@ -15,23 +15,22 @@ enum user_action {
         SHOOT,
         IDLE
 };
-
+/*Class that contains all the information about current game
+ seession used by gamewindow and gameloop */
 class GameData
 {
 public:
     GameData();
     movingItem* addBullet(int x,
                           int y);
-
+    void setAction(user_action a);
+    void releaseAction(user_action a);
 //private: //public only for early testing/developing
     movingItem * player; //raw pointer because handled as part of scene
-    movingItem * background;
-    user_action action;
-    std::vector<mapItem*> tiles; //temporary, for testing
+    std::vector<user_action*> actions;
+    std::vector<mapItem*> tiles;
     std::vector<movingItem*> bullets;
 
-    int shootPointX;
-    int shootPointY;
 
 };
 

@@ -16,15 +16,7 @@ GameData::GameData()
    player->posX=500;
    player->posY=574;
 
-   QImage image2(":/images/background1.bmp");
-   background = new movingItem();
-   background->setPixmap(QPixmap::fromImage(image2));
-
    QImage image3(":/images/tile1.bmp");
-  // auto tile = new mapItem();
-  // tile->setPixmap(QPixmap::fromImage(image3));
-  // tile->posX=485;
-  // tile->posY=600;
 
    int i =0;
 
@@ -76,8 +68,6 @@ GameData::GameData()
 
        tiles.push_back(tile);
 
-       qDebug() << "Created TILE!";
-
        i+=50;
        if(i>600)
            break;
@@ -92,25 +82,21 @@ i=0;
 
        tiles.push_back(tile);
 
-       qDebug() << "Created TILE!";
-
        i+=50;
        if(i>1000)
            break;
    }
 
-   bullets = std::vector<movingItem*>(); //gotta init it somewhere...
-   action = IDLE; //delete this when default values are handled... or smth
+   bullets = std::vector<movingItem*>();
+   actions = std::vector<user_action*>();
 
 }
 
 movingItem* GameData::addBullet(int shootPointX,
-                                 int shootPointY)
+                                int shootPointY)
                                           //first prototype version, must get much more customizable in future
                                           //Also cleaner
 {
-    action = SHOOT;
-
     int tempx=1;
     int tempy=1;
 
@@ -126,14 +112,8 @@ movingItem* GameData::addBullet(int shootPointX,
 
     float ratio = diffX/(diffX+diffY); //i am doing this to get angle at which the bullet is shot
 
-    float speedx = ratio*75 * tempx;
-    float speedy = (1-ratio)*75 * tempy;
-
-  /*  qDebug() << "diffX " <<diffX;
-    qDebug() << "diffY " <<diffY;
-    qDebug() << "RATIO " <<ratio;   LOGS
-    qDebug() << "speedx " << speedx;
-    qDebug() << "speedy " << speedy;*/
+    float speedx = ratio*100 * tempx;
+    float speedy = (1-ratio)*100 * tempy;
 
     movingItem * bullet = new movingItem((int)speedx,(int)speedy,player->posX,player->posY);
 
@@ -144,5 +124,25 @@ movingItem* GameData::addBullet(int shootPointX,
 
 }
 
+void GameData::setAction(user_action a)
+{
+    actions.push_back(new user_action(a));
+}
+
+void GameData::releaseAction(user_action a)
+{
+    //This can be done better i think xd
+    //Also using vector in this case is
+    //rather not the best. Use list instead?
+    int j =0;
+    for(auto &i : actions)
+    {
+        if(*i==a)
+            break;
+        j++;
+    }
+    actions.erase(actions.begin()+j);
+
+}
 
 } // namespace game
