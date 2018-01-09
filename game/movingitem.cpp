@@ -22,6 +22,8 @@ movingItem::movingItem(int speedx,
 void movingItem::accelerate(int accelerate_value)
 {
     speedX+=accelerate_value;
+    qDebug() <<"speed after acceleration is " <<speedX;
+
 }
 
 void movingItem::jump()

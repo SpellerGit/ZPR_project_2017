@@ -27,7 +27,7 @@ void GameWindow::updateDisplay()
 {
      checkCollisions();
 
-     gdata->player->setPos(gdata->player->posX,gdata->player->posY);
+    // gdata->player->setPos(gdata->player->posX,gdata->player->posY);
 
 
      if(!gdata->bullets.empty())
@@ -39,48 +39,87 @@ void GameWindow::updateDisplay()
 
 void GameWindow::checkCollisions()
 {
+   // qDebug() << "check with x speed " << gdata->player->speedX ;
 
-    //Maybe we should rethink how to handle collision detection...
-    auto itemCollidingPlayer = scene->collidingItems(gdata->player);
-    if(gdata->player->speedY>0)
-       if(!itemCollidingPlayer.empty())
-       {
-           for(auto i : itemCollidingPlayer)
-           {
-                if(gdata->player->y()+gdata->player->boundingRect().height()>i->y()
-                && gdata->player->y()+gdata->player->boundingRect().height()<i->y()+40
-                && gdata->player->y()+gdata->player->boundingRect().height()<i->y()+i->boundingRect().height())
+    float vx = (float)gdata->player->speedX;    //nice cast btw
+    float vy = (float)gdata->player->speedY;
+    float normalisedX =0;
+    float normalisedY =0;
+
+    /**Normalisation**\
+     * We want to be checking each pixel traveled, so we must be moving per 1 pixel, therefore
+     * we normalise velocity values to max 1*/
+
+    if(abs(vx)>=abs(vy))
+    {
+        normalisedX=vx/abs(vx);
+        normalisedY=vy/abs(vx);
+    }
+    else
+    {
+        normalisedY=vy/abs(vy);
+        normalisedX=vx/abs(vy);
+    }
+
+    float movedX=0;
+    float movedY=0;
+
+    int startPosX = gdata->player->x();
+    int startPosY = gdata->player->y();
+
+    //qDebug() << "to while";
+    while(abs(movedX)<abs(vx) || abs(movedY)<abs(vy))
+    {
+        //qDebug() << "movedX " << abs(movedX) << " vx " << abs(vx) << " movedY " << abs(movedY) << " vy " <<abs(vy);
+        movedX+=normalisedX;
+        movedY+=normalisedY;
+
+        int posX = startPosX+movedX; // caution : (int)float
+        int posY = startPosY+movedY;
+
+        gdata->player->setPos(posX,posY);
+
+        //Collision checking
+
+        auto itemCollidingPlayer = scene->collidingItems(gdata->player);
+
+        if(!itemCollidingPlayer.empty())
+        {
+            for(auto i : itemCollidingPlayer)
+            {
+               // qDebug() << "collision detected ||| tile loc " << i->y() << " player ovrall loc " << gdata->player->y()+gdata->player->boundingRect().height() -1;
+                if (i->y()==gdata->player->y()+gdata->player->boundingRect().height() - 1)
                 {
                     gdata->player->speedY=0;
-                    gdata->player->posY=
-                    i->y()-gdata->player->boundingRect().height()+1;
-                       //Why is there +1? Because if we dont add+1, then in next frame there will not be any
-                       //collisions detected, and player will go down again, then collision will be detected and player
-                       //will go back up. In other words player would oscilate up and down.
+                    vy=0;
+                    normalisedY=0;
+                    gdata->player->setPos(gdata->player->x(),  gdata->player->y()-1);
                 }
-                else if(i->y()+i->boundingRect().height()>gdata->player->y()
-                && i->y()+i->boundingRect().height()<gdata->player->y()+25)
-                        //For some reason there is problem with detecting collisions when moving up
-                        //It seems that collision would not be detected until Y speed eqauls 0
+                else if (i->y()+i->boundingRect().height()==gdata->player->y() + 1)
                 {
                     gdata->player->speedY=0;
-                    gdata->player->posY=
-                            i->y()+i->boundingRect().height();
+                    vy=0;
+                    normalisedY=0;
+                    gdata->player->setPos(gdata->player->x(),  gdata->player->y()+1);
                 }
-                else if(gdata->player->x()<i->x())
+                else if (i->x()==gdata->player->x()+gdata->player->boundingRect().width() - 1)
                 {
                     gdata->player->speedX=0;
-                    gdata->player->posX=
-                           i->x()-gdata->player->boundingRect().width();
+                    vx=0;
+                    normalisedX=0;
+                    gdata->player->setPos(gdata->player->x()-1,gdata->player->y());
                 }
-                else if(gdata->player->x()>i->x())
+                else if (i->x()+i->boundingRect().width()==gdata->player->x() + 1)
                 {
                     gdata->player->speedX=0;
-                    gdata->player->posX=
-                    i->x()+i->boundingRect().width();
+                    vx=0;
+                    normalisedX=0;
+                    gdata->player->setPos(gdata->player->x()+1,gdata->player->y());
                 }
             }
-       }
+        }
+
+    }
 }
 
 QGraphicsScene * GameWindow::getScenePointer() const
@@ -115,7 +154,7 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                 const QPointF position = me->scenePos();
                 movingItem * bullet = gdata->addBullet(position.x(),position.y()); //shoudl this be here
                 scene->addItem(bullet);
-                bullet->setPos(gdata->player->posX,gdata->player->posY);
+                bullet->setPos(gdata->player->x(),gdata->player->y());
                 gdata->bullets.push_back(bullet);
                 return true;
             }

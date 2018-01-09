@@ -100,14 +100,14 @@ movingItem* GameData::addBullet(int shootPointX,
     int tempx=1;
     int tempy=1;
 
-    if(shootPointX-player->posX<0)
+    if(shootPointX-player->x()<0)
         tempx=-1;
 
-    if(shootPointY-player->posY<0)
+    if(shootPointY-player->y()<0)
         tempy=-1;
 
-    float diffX = abs(shootPointX-player->posX);
-    float diffY = abs(shootPointY-player->posY); //can user break the game when he presses on himself?
+    float diffX = abs(shootPointX-player->x());
+    float diffY = abs(shootPointY-player->y()); //can user break the game when he presses on himself?
                                                  //we would get zero division maybe we should handle this error
 
     float ratio = diffX/(diffX+diffY); //i am doing this to get angle at which the bullet is shot
@@ -115,7 +115,7 @@ movingItem* GameData::addBullet(int shootPointX,
     float speedx = ratio*100 * tempx;
     float speedy = (1-ratio)*100 * tempy;
 
-    movingItem * bullet = new movingItem((int)speedx,(int)speedy,player->posX,player->posY);
+    movingItem * bullet = new movingItem((int)speedx,(int)speedy,player->x(),player->y());
 
     QImage image(":/images/bullet.png");
     bullet->setPixmap(QPixmap::fromImage(image));

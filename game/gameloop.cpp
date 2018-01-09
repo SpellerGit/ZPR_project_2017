@@ -40,8 +40,9 @@ void GameLoop::run()
                 break;
         }
 
-        handleMovement();
         emit mySignal();
+        handleMovement(); //is that not risky (rw conflict) to do that in this async way?
+
 }
 
 void GameLoop::handleMovement()
