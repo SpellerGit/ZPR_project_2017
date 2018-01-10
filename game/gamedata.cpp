@@ -15,6 +15,7 @@ GameData::GameData()
    player->setPixmap(QPixmap::fromImage(image));
    player->posX=500;
    player->posY=574;
+   player->hitPoints=999999999;
 
    QImage image3(":/images/tile1.bmp");
 
@@ -97,28 +98,44 @@ movingItem* GameData::addBullet(int shootPointX,
                                           //first prototype version, must get much more customizable in future
                                           //Also cleaner
 {
+    //We want to bullet appear on screen in right place, next to player and towards shooting direction
+    QPoint middle(player->x()+player->boundingRect().width()/2,player->y()+player->boundingRect().height()/2);
+
+    const int fullSpeed = 100; //tmp
+
     int tempx=1;
     int tempy=1;
 
-    if(shootPointX-player->x()<0)
+    if(shootPointX-middle.x()<0)
         tempx=-1;
 
-    if(shootPointY-player->y()<0)
+    if(shootPointY-middle.y()<0)
         tempy=-1;
 
-    float diffX = abs(shootPointX-player->x());
-    float diffY = abs(shootPointY-player->y()); //can user break the game when he presses on himself?
+    float diffX = abs(shootPointX-middle.x());
+    float diffY = abs(shootPointY-middle.y()); //can user break the game when he presses on himself?
                                                  //we would get zero division maybe we should handle this error
 
     float ratio = diffX/(diffX+diffY); //i am doing this to get angle at which the bullet is shot
 
-    float speedx = ratio*100 * tempx;
-    float speedy = (1-ratio)*100 * tempy;
+    float speedx = ratio*fullSpeed * tempx;
+    float speedy = (1-ratio)*fullSpeed * tempy;
 
-    movingItem * bullet = new movingItem((int)speedx,(int)speedy,player->x(),player->y());
+    movingItem * bullet = new movingItem((int)speedx,(int)speedy,middle.x(),middle.y(),10); //setting hp to tmp 10
 
     QImage image(":/images/bullet.png");
     bullet->setPixmap(QPixmap::fromImage(image));
+
+    if(abs(speedx)>abs(speedy))
+    {
+        float ratio2 = player->boundingRect().width()/abs(speedx);
+        bullet->setPos(middle.x()+speedx*ratio2,middle.y()+speedy*ratio2);
+    }
+    else
+    {
+        float ratio2 = player->boundingRect().height()/abs(speedy);
+        bullet->setPos(middle.x()+speedx*ratio2,middle.y()+speedy*ratio2);
+    }
 
     return bullet;
 

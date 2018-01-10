@@ -8,6 +8,7 @@ class mapItem : public QGraphicsPixmapItem
 {
 public:
     virtual ~mapItem();
+    virtual bool destroyed();
 
 //private: for time being public, to be changed
     int posX;

@@ -51,15 +51,18 @@ void GameLoop::handleMovement()
 
 
     if(!data->bullets.empty())
+    { //qDebug() << " bullets number : " << data->bullets.size(); //delete later
         for(int i =0; i<data->bullets.size(); i++)
         {
             data->bullets[i]->move();
             //delete objects if they go too far
-            if(data->bullets[i]->posX>10000 || data->bullets[i]->posX<-500
-                    || data->bullets[i]->posY>10000 || data->bullets[i]->posY<-500)
+            if(data->bullets[i]->x()>10000 || data->bullets[i]->x()<-500
+                    || data->bullets[i]->y()>10000 || data->bullets[i]->y()<-5000
+                    || data->bullets[i]->hitPoints<=0)
             data->bullets.erase(data->bullets.begin()+i);
 
         }
+    }
 
 }
 

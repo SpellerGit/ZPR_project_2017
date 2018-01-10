@@ -28,7 +28,9 @@ private slots:
 
 private:
     void checkCollisions();
+    void shoot(QGraphicsSceneMouseEvent* event);
     bool eventFilter(QObject *target, QEvent *event);
+
     std::shared_ptr<GameData> gdata;
     QGraphicsScene * scene;
     Ui::GameWindow *ui;

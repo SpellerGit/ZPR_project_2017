@@ -13,9 +13,15 @@ public:
                int speedy,
                int posx,
                int posy);
+    movingItem(int speedx,
+               int speedy,
+               int posx,
+               int posy,
+               int hp);
     void accelerate(int accelerate_value);
     void jump();
     void move();
+    bool destroyed();
 
 //private: (make it public) TODO checking collisions changes speed, handle it nicer (in function)
     int speedX;

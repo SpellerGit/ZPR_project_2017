@@ -9,7 +9,12 @@ namespace game {
 
 mapItem::~mapItem()
 {
+    hitPoints=50;
+}
 
+bool mapItem::destroyed()
+{
+    return true;
 }
 
 } //namespace game

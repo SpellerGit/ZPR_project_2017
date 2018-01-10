@@ -5,6 +5,7 @@ namespace game {
 
 movingItem::movingItem()
 {
+    hitPoints = 50;
     speedX =0;
     speedY =0;
 }
@@ -15,15 +16,24 @@ movingItem::movingItem(int speedx,
                        int posy)
     : speedX(speedx), speedY(speedy)
 {
-    posX = posx;
-    posY = posy;
+    setPos(posx,posy);
+    hitPoints = 50;
+}
+
+movingItem::movingItem(int speedx,
+                       int speedy,
+                       int posx,
+                       int posy,
+                       int hp)
+    : speedX(speedx), speedY(speedy)
+{
+    hitPoints = hp;
+    setPos(posx,posy);
 }
 
 void movingItem::accelerate(int accelerate_value)
 {
     speedX+=accelerate_value;
-    qDebug() <<"speed after acceleration is " <<speedX;
-
 }
 
 void movingItem::jump()
@@ -31,7 +41,7 @@ void movingItem::jump()
     speedY=-16; // temporary value
 }
 
-void movingItem:: move()
+void movingItem::move()
 {
     posX=posX+speedX;
     posY=posY+speedY;
@@ -46,6 +56,14 @@ void movingItem:: move()
     }
     if(speedY<40) //40 - temp value, max velocity
         speedY=speedY+4;
+}
+
+bool movingItem::destroyed()
+{
+    hitPoints -= 10;
+   // qDebug() << "DAMAGE hp remaining is " << hitPoints;
+
+    return (hitPoints<=0 ? true : false);
 }
 
 } // namespace game
