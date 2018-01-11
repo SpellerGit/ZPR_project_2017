@@ -5,9 +5,10 @@ namespace game {
 
 movingItem::movingItem()
 {
-    hitPoints = 50;
     speedX =0;
     speedY =0;
+    hitPoints=50;
+    actions = std::vector<user_action*>();  //maybe add class player to have this, no?
 }
 
 movingItem::movingItem(int speedx,
@@ -18,6 +19,7 @@ movingItem::movingItem(int speedx,
 {
     setPos(posx,posy);
     hitPoints = 50;
+    actions = std::vector<user_action*>();
 }
 
 movingItem::movingItem(int speedx,
@@ -29,6 +31,8 @@ movingItem::movingItem(int speedx,
 {
     hitPoints = hp;
     setPos(posx,posy);
+    actions = std::vector<user_action*>();
+
 }
 
 void movingItem::accelerate(int accelerate_value)
@@ -43,9 +47,6 @@ void movingItem::jump()
 
 void movingItem::move()
 {
-    posX=posX+speedX;
-    posY=posY+speedY;
-
     if(speedX!=0)
     {
         if(speedX<0)
@@ -61,9 +62,29 @@ void movingItem::move()
 bool movingItem::destroyed()
 {
     hitPoints -= 10;
-   // qDebug() << "DAMAGE hp remaining is " << hitPoints;
 
     return (hitPoints<=0 ? true : false);
+}
+
+void movingItem::setAction(user_action a)
+{
+    actions.push_back(new user_action(a));
+}
+
+void movingItem::releaseAction(user_action a)
+{
+    //This can be done better i think xd
+    //Also using vector in this case is
+    //rather not the best. Use list instead?
+    int j =0;
+    for(auto &i : actions)
+    {
+        if(*i==a)
+            break;
+        j++;
+    }
+    actions.erase(actions.begin()+j);
+
 }
 
 } // namespace game

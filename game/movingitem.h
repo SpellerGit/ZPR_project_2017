@@ -5,6 +5,14 @@
 
 namespace game{
 
+enum user_action {
+        MOVE_LEFT,
+        MOVE_RIGHT,
+        JUMP,
+        SHOOT,
+        IDLE
+};
+
 class movingItem : public mapItem
 {
 public:
@@ -22,10 +30,15 @@ public:
     void jump();
     void move();
     bool destroyed();
+    void setAction(user_action a);
+    void releaseAction(user_action a);
+
 
 //private: (make it public) TODO checking collisions changes speed, handle it nicer (in function)
     int speedX;
     int speedY;
+    std::vector<user_action*> actions;
+
 };
 
 } // namespcae game

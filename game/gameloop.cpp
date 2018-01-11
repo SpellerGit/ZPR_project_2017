@@ -21,24 +21,25 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
 
 void GameLoop::run()
 {
-    if(!data->actions.empty())
-    for(auto &i : data->actions)
-        switch(*i)
-        {
-            case MOVE_LEFT:
-                data->player->accelerate(-5);
-                break;
-            case MOVE_RIGHT:
-                data->player->accelerate(5);
-                break;
-            case JUMP:
-                data->player->jump();
-                break;
-            case SHOOT:
-                break;
-            default:
-                break;
-        }
+    for(auto j : data->players)
+        if(!j->actions.empty())
+            for(auto &i : j->actions)
+                switch(*i)
+                {
+                    case MOVE_LEFT:
+                        j->accelerate(-5);
+                        break;
+                    case MOVE_RIGHT:
+                        j->accelerate(5);
+                        break;
+                    case JUMP:
+                        j->jump();
+                        break;
+                    case SHOOT:
+                        break;
+                    default:
+                        break;
+                }
 
         emit mySignal();
         handleMovement(); //is that not risky (rw conflict) to do that in this async way?
@@ -47,11 +48,12 @@ void GameLoop::run()
 
 void GameLoop::handleMovement()
 {
-    data->player->move();
+    for(auto &i : data->players)
+    i->move();
 
 
     if(!data->bullets.empty())
-    { //qDebug() << " bullets number : " << data->bullets.size(); //delete later
+    { qDebug() << " bullets number : " << data->bullets.size(); //delete later
         for(int i =0; i<data->bullets.size(); i++)
         {
             data->bullets[i]->move();
@@ -60,7 +62,6 @@ void GameLoop::handleMovement()
                     || data->bullets[i]->y()>10000 || data->bullets[i]->y()<-5000
                     || data->bullets[i]->hitPoints<=0)
             data->bullets.erase(data->bullets.begin()+i);
-
         }
     }
 

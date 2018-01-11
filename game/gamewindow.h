@@ -28,7 +28,8 @@ private slots:
 
 private:
     void checkCollisions();
-    void shoot(QGraphicsSceneMouseEvent* event);
+    void shoot(QGraphicsSceneMouseEvent* event,
+               int playerNumber);
     bool eventFilter(QObject *target, QEvent *event);
 
     std::shared_ptr<GameData> gdata;

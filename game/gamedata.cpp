@@ -11,11 +11,17 @@ namespace game {
 GameData::GameData()
 {
    QImage image(":/images/image3.png");
-   player = new movingItem();
+   auto player = new movingItem();
    player->setPixmap(QPixmap::fromImage(image));
-   player->posX=500;
-   player->posY=574;
-   player->hitPoints=999999999;
+   player->hitPoints=100;
+
+   players.push_back(player);
+
+   auto player2 = new movingItem(0,0,200,200,100); //aka the cpu player
+   player2->setPixmap(QPixmap::fromImage(image));
+
+   players.push_back(player2);
+
 
    QImage image3(":/images/tile1.bmp");
 
@@ -89,17 +95,18 @@ i=0;
    }
 
    bullets = std::vector<movingItem*>();
-   actions = std::vector<user_action*>();
 
 }
 
 movingItem* GameData::addBullet(int shootPointX,
-                                int shootPointY)
+                                int shootPointY,
+                                int playerNumer)
                                           //first prototype version, must get much more customizable in future
                                           //Also cleaner
 {
     //We want to bullet appear on screen in right place, next to player and towards shooting direction
-    QPoint middle(player->x()+player->boundingRect().width()/2,player->y()+player->boundingRect().height()/2);
+    QPoint middle(players[playerNumer]->x()+players[playerNumer]->boundingRect().width()/2,
+                  players[playerNumer]->y()+players[playerNumer]->boundingRect().height()/2);
 
     const int fullSpeed = 100; //tmp
 
@@ -128,37 +135,16 @@ movingItem* GameData::addBullet(int shootPointX,
 
     if(abs(speedx)>abs(speedy))
     {
-        float ratio2 = player->boundingRect().width()/abs(speedx);
+        float ratio2 = players[playerNumer]->boundingRect().width()/abs(speedx);
         bullet->setPos(middle.x()+speedx*ratio2,middle.y()+speedy*ratio2);
     }
     else
     {
-        float ratio2 = player->boundingRect().height()/abs(speedy);
+        float ratio2 = players[playerNumer]->boundingRect().height()/abs(speedy);
         bullet->setPos(middle.x()+speedx*ratio2,middle.y()+speedy*ratio2);
     }
 
     return bullet;
-
-}
-
-void GameData::setAction(user_action a)
-{
-    actions.push_back(new user_action(a));
-}
-
-void GameData::releaseAction(user_action a)
-{
-    //This can be done better i think xd
-    //Also using vector in this case is
-    //rather not the best. Use list instead?
-    int j =0;
-    for(auto &i : actions)
-    {
-        if(*i==a)
-            break;
-        j++;
-    }
-    actions.erase(actions.begin()+j);
 
 }
 
