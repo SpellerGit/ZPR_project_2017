@@ -9,6 +9,7 @@ namespace Ui {
 class GameWindow;
 }
 namespace game {
+/*Class with window where the game is playing*/
 class GameWindow : public QWidget
 {
     Q_OBJECT
@@ -27,8 +28,10 @@ private slots:
 
 private:
     void checkCollisions();
-    void showEvent(QShowEvent *);
+    void shoot(QGraphicsSceneMouseEvent* event,
+               int playerNumber);
     bool eventFilter(QObject *target, QEvent *event);
+
     std::shared_ptr<GameData> gdata;
     QGraphicsScene * scene;
     Ui::GameWindow *ui;

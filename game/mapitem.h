@@ -7,12 +7,13 @@ namespace game {
 class mapItem : public QGraphicsPixmapItem
 {
 public:
-  //  mapItem();
     virtual ~mapItem();
+    virtual bool destroyed();
 
 //private: for time being public, to be changed
     int posX;
     int posY;
+    int hitPoints;
 
 };
 
