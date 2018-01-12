@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.6.0
+** Created by: Qt User Interface Compiler version 5.9.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -15,7 +15,6 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -29,7 +28,7 @@ public:
     QWidget *centralWidget;
     QPushButton *button1;
     QPushButton *button2;
-    QMenuBar *menuBar;
+    QPushButton *hostbutton;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -42,15 +41,14 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         button1 = new QPushButton(centralWidget);
         button1->setObjectName(QStringLiteral("button1"));
-        button1->setGeometry(QRect(10, 50, 161, 171));
+        button1->setGeometry(QRect(110, 0, 161, 81));
         button2 = new QPushButton(centralWidget);
         button2->setObjectName(QStringLiteral("button2"));
-        button2->setGeometry(QRect(260, 140, 80, 25));
+        button2->setGeometry(QRect(110, 180, 161, 81));
+        hostbutton = new QPushButton(centralWidget);
+        hostbutton->setObjectName(QStringLiteral("hostbutton"));
+        hostbutton->setGeometry(QRect(110, 90, 161, 81));
         MainWindow->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 25));
-        MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
@@ -65,9 +63,10 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        button1->setText(QApplication::translate("MainWindow", "button1", 0));
-        button2->setText(QApplication::translate("MainWindow", "Select Map", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        button1->setText(QApplication::translate("MainWindow", "Local game", Q_NULLPTR));
+        button2->setText(QApplication::translate("MainWindow", "Select Map", Q_NULLPTR));
+        hostbutton->setText(QApplication::translate("MainWindow", "Online game", Q_NULLPTR));
     } // retranslateUi
 
 };

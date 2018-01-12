@@ -4,7 +4,7 @@ SOURCES += \
     $$PWD/gamemanager.cpp \
     $$PWD/mapitem.cpp \
     $$PWD/movingitem.cpp \
-    $$PWD/gamedata.cpp
+    $$PWD/gamedata.cpp \
 
 HEADERS += \
     $$PWD/gamewindow.h \

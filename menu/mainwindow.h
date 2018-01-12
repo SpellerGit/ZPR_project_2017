@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "game/gamemanager.h"
+#include "menu/gamelobby.h"
 #include <QMainWindow>
 #include <QPushButton>
 
@@ -19,12 +20,13 @@ public:
 private slots:
     void handleButton();
     void handleSelectMap();
+    void handleNetwork();
 
 private:
     std::unique_ptr<game::GameManager> mngr;
     std::shared_ptr<game::GameData> gamedata;
+    std::unique_ptr<GameLobby> lobby;
     Ui::MainWindow *ui;
-    QPushButton *button1;
 };
 
 #endif // MAINWINDOW_H
