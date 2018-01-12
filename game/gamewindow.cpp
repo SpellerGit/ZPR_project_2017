@@ -14,6 +14,8 @@ GameWindow::GameWindow(QWidget *parent) :
     ui(new Ui::GameWindow)
 {
     ui->setupUi(this);
+    ui->gameView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->gameView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scene = new QGraphicsScene(this);
     ui->gameView->setScene(scene);
 

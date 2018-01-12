@@ -12,14 +12,19 @@ GameManager::~GameManager()
 
 }
 
-void GameManager::startGame()
+void GameManager::startGame() // its loading test map
 {
+
     gamedata = std::shared_ptr<GameData>(new GameData());
+
+    qDebug() << "to make loop";
     gamewindow = new GameWindow();
     gamewindow->setData(gamedata);
 
     loop = new GameLoop(gamedata,gamewindow);
     gamewindow->show();
+    qDebug() << "to run loop";
+
 }
 
 
