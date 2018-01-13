@@ -11,7 +11,8 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
                    GameWindow * gamewindpow_ptr)
             : data(gamedata), gamewindow(gamewindpow_ptr)
 {
-    connect(this, SIGNAL(mySignal()),
+    netGame = false;
+    connect(this, SIGNAL(loopSignal()),
             gamewindow, SLOT(updateDisplay()));
 
     QTimer *timer = new QTimer(this);
@@ -21,6 +22,10 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
 
 void GameLoop::run()
 {
+    if(netGame)
+        for(int i =0; i<data->players[0]->actions.size(); i++)
+            emit sendUserAction(*data->players[0]->actions[i]);
+
     for(auto j : data->players)
         if(!j->actions.empty())
             for(auto &i : j->actions)
@@ -41,7 +46,7 @@ void GameLoop::run()
                         break;
                 }
 
-        emit mySignal();
+        emit loopSignal();
         handleMovement(); //is that not risky (rw conflict) to do that in this async way?
 
 }
@@ -53,7 +58,7 @@ void GameLoop::handleMovement()
 
 
     if(!data->bullets.empty())
-    { qDebug() << " bullets number : " << data->bullets.size(); //delete later
+    {
         for(int i =0; i<data->bullets.size(); i++)
         {
             data->bullets[i]->move();
@@ -65,6 +70,16 @@ void GameLoop::handleMovement()
         }
     }
 
+}
+
+void GameLoop::addNetUserAction(user_action a)
+{
+    data->players[1]->setAction(a);
+}
+
+void GameLoop::setNetGame()
+{
+    netGame = true;
 }
 
 GameLoop::~GameLoop()

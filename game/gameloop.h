@@ -17,14 +17,20 @@ public:
     GameLoop(std::shared_ptr<GameData> gamedata,
              GameWindow * gamewindow);
     ~GameLoop();
+    void setNetGame();
+
+public slots:
+    void addNetUserAction(user_action a);
+
+signals:
+   void loopSignal();
+   void sendUserAction(user_action a);
 
 private:
     std::shared_ptr<GameData> data;
     GameWindow * gamewindow;
     void handleMovement();
-
-signals:
-   void mySignal();
+    bool netGame;
 
 private slots:
    void run();

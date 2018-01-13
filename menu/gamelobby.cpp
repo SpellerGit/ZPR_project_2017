@@ -12,8 +12,11 @@ GameLobby::GameLobby(QWidget *parent) :
 
       QObject::connect(ui->hostButton, SIGNAL (released()), this, SLOT (hostGame()));
       QObject::connect(ui->joinButton, SIGNAL (released()), this, SLOT (joinGame()));
+}
 
-      connection = std::unique_ptr<network::Connection>(new network::Connection());
+void GameLobby::setConnection(std::shared_ptr<network::Connection> con)
+{
+    connection = con;
 }
 
 void GameLobby::hostGame()

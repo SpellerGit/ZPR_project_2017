@@ -1,18 +1,16 @@
 #include "connection.h"
-
 #include <QtNetwork>
 
 namespace network {
 
 Connection::Connection()
 {
-    tcpSocket = new QTcpSocket(this);
+    /*tcpSocket = new QTcpSocket(this);
     in.setDevice(tcpSocket);
     in.setVersion(QDataStream::Qt_5_9);
 
-    connect(tcpSocket, &QIODevice::readyRead, this, &Connection::readHost);
     connect(tcpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
-               this, &Connection::displayError);
+               this, &Connection::displayError);*/
 
 
     /* this code idk, copied it from http://doc.qt.io/qt-5/qtnetwork-fortuneclient-client-cpp.html
@@ -47,13 +45,8 @@ void Connection::host()
     tcpServer = new QTcpServer(this);
     connect(tcpServer, &QTcpServer::newConnection, this, &Connection::handleNewConnection);
 
-        if (!tcpServer->listen(QHostAddress(QHostAddress::LocalHost),50000))
-        {
-            qDebug() << tcpServer->errorString();
-            //tcpServer->close();
-            return;
-        }
-        QString ipAddress;
+
+        QHostAddress ipAddress;
         QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
         // use the first non-localhost IPv4 address
         for (int i = 0; i < ipAddressesList.size(); ++i)
@@ -61,62 +54,102 @@ void Connection::host()
             if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
                 ipAddressesList.at(i).toIPv4Address())
             {
-                ipAddress = ipAddressesList.at(i).toString();
+                ipAddress = ipAddressesList.at(i);
                 break;
             }
         }
-        // if we did not find one, use IPv4 localhost
-        if (ipAddress.isEmpty())
-            ipAddress = QHostAddress(QHostAddress::LocalHost).toString();
-        qDebug() << "The server is running on\n\nIP: " <<  QHostAddress(QHostAddress::LocalHost).toString()
+
+        if (!tcpServer->listen(ipAddress,55000))
+        {
+            qDebug() << tcpServer->errorString();
+            //tcpServer->close();
+            return;
+        }
+
+        qDebug() << "The server is running on\n\nIP: " <<  ipAddress.toString()
                  <<" \nport: " <<tcpServer->serverPort();
+
 }
 
 void Connection::handleNewConnection()
 {
+     qDebug() <<"new connection!";
      QByteArray block;
      QDataStream out(&block, QIODevice::WriteOnly);
      out.setVersion(QDataStream::Qt_5_9);
 
-     QString * sendIt = new QString("TEST RESPONSE FROM HOST");
+     QString sendIt("5");
+
+     qDebug()<<"will now send " <<sendIt;
 
      out << sendIt;
 
-     //QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
-     /**          very interesting solution btw xD              **/
-     if(tcpSocket)
-     delete tcpSocket;
      tcpSocket = tcpServer->nextPendingConnection();
-     connect(tcpSocket, &QAbstractSocket::disconnected,
-             tcpSocket, &QObject::deleteLater);
+
+     in.setDevice(tcpSocket);
+     in.setVersion(QDataStream::Qt_5_9);
+
+     connect(tcpSocket, &QIODevice::readyRead, this, &Connection::readHost);
+     connect(tcpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
+                this, &Connection::displayError);
 
      tcpSocket->write(block);
-     tcpSocket->disconnectFromHost();
-     delete sendIt;
+
+     emit startGame();
+     //tcpSocket->disconnectFromHost();
 }
 
 void Connection::joinHost(QString hostName,
                           int port)
 {
+    tcpSocket = new QTcpSocket(this);
+    in.setDevice(tcpSocket);
+    in.setVersion(QDataStream::Qt_5_9);
+
+    connect(tcpSocket, &QIODevice::readyRead, this, &Connection::readHost);
+    connect(tcpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
+               this, &Connection::displayError);
+
     tcpSocket->connectToHost((QString)hostName,
                              port);
 }
 
 void Connection::readHost()
 {
+    qDebug() <<"readHost";
     in.startTransaction();
 
-    QString Message;
-    in >> Message;
+    QString message;
+    in >> message;
 
     if (!in.commitTransaction())
     {   qDebug() << "error occured during transaction";
         return;
     }
 
-    qDebug() << Message;
+    qDebug() << message;
+
+    int messageInt = message.toInt();
+    if(messageInt>=0 || messageInt<=4)
+        emit receiveAction((game::user_action)messageInt);
+
+    if(messageInt==5)
+        emit startGame();
+
 }
 
+void Connection::sendAction(game::user_action a)
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+
+    qDebug()<<"will now send " <<QString::number(int(a));
+
+    out << QString::number(int(a));
+
+    tcpSocket->write(block);
+}
 
 void Connection::displayError(QAbstractSocket::SocketError socketError)
 {
@@ -157,8 +190,10 @@ void Connection::sessionOpened()
 
 Connection::~Connection()
 {
+    tcpSocket->disconnectFromHost();
     tcpServer->close();
     tcpSocket->close();
+    delete tcpSocket;
 }
 
 } //network

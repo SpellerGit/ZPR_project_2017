@@ -240,7 +240,7 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                          gdata->players[0]->setAction(JUMP);
                          break;
 
-                    case Qt::Key_Left:
+                    /*case Qt::Key_Left:
                          gdata->players[1]->setAction(MOVE_LEFT);
                          break;
                     case Qt::Key_Right:
@@ -248,7 +248,7 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                          break;
                     case Qt::Key_Up:
                          gdata->players[1]->setAction(JUMP);
-                         break;
+                         break;*/
 
                     default:
                          break;
@@ -270,7 +270,7 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                          gdata->players[0]->releaseAction(JUMP);
                          break;
 
-                    case Qt::Key_Left:
+                   /* case Qt::Key_Left:
                          gdata->players[1]->releaseAction(MOVE_LEFT);
                          break;
                     case Qt::Key_Right:
@@ -278,7 +278,7 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                          break;
                     case Qt::Key_Up:
                          gdata->players[1]->releaseAction(JUMP);
-                         break;
+                         break;*/
 
                     default:
                          break;

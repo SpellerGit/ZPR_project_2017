@@ -26,6 +26,7 @@ private:
     std::unique_ptr<game::GameManager> mngr;
     std::shared_ptr<game::GameData> gamedata;
     std::unique_ptr<GameLobby> lobby;
+    std::shared_ptr<network::Connection> connection;
     Ui::MainWindow *ui;
 };
 

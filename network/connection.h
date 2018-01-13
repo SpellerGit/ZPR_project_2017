@@ -5,6 +5,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QtNetwork>
+#include "game/movingitem.h"
 
 namespace network{
 
@@ -17,12 +18,18 @@ public:
     void host();
     void joinHost(QString name,
                   int port);
+public slots:
+    void sendAction(game::user_action a);
 
 private slots:
     void readHost();
     void displayError(QAbstractSocket::SocketError socketError);
     void sessionOpened();
     void handleNewConnection();
+
+signals:
+    void startGame();
+    void receiveAction(game::user_action a);
 
 private:
     QTcpServer *tcpServer = nullptr;

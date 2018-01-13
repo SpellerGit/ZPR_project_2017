@@ -15,13 +15,14 @@ class GameLobby : public QWidget
 public:
     explicit GameLobby(QWidget *parent = 0);
     ~GameLobby();
+    void setConnection(std::shared_ptr<network::Connection> con);
 
 private slots:
     void joinGame();
     void hostGame();
 
 private:
-    std::unique_ptr<network::Connection> connection;
+    std::shared_ptr<network::Connection> connection;
     Ui::GameLobby* ui;
 };
 
