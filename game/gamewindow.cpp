@@ -22,7 +22,6 @@ GameWindow::GameWindow(QWidget *parent) :
 
     scene->installEventFilter(this);
     QObject::connect(ui->exitButton, SIGNAL (released()), this, SLOT (handleExit()));
-
 }
 
 void GameWindow::updateDisplay()

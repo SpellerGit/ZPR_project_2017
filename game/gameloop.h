@@ -5,6 +5,7 @@
 #include <functional>
 #include "game/gamedata.h"
 #include "game/gamewindow.h"
+#include "network/connection.h"
 #include <qgraphicsscene.h>
 #include <QRunnable>
 
@@ -17,16 +18,17 @@ public:
     GameLoop(std::shared_ptr<GameData> gamedata,
              GameWindow * gamewindow);
     ~GameLoop();
-    void setNetGame();
+    void setConnection(std::shared_ptr<network::Connection> con);
 
 public slots:
-    void addNetUserAction(user_action a);
+    void addNetUserAction(game::user_action a);
 
 signals:
    void loopSignal();
-   void sendUserAction(user_action a);
+   void sendUserAction(game::user_action a);
 
 private:
+    std::shared_ptr<network::Connection> connection;
     std::shared_ptr<GameData> data;
     GameWindow * gamewindow;
     void handleMovement();

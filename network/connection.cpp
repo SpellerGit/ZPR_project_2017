@@ -95,7 +95,8 @@ void Connection::handleNewConnection()
 
      tcpSocket->write(block);
 
-     emit startGame();
+     qDebug()<<"will now emit start game signal";
+     emit startGameSignal();
      //tcpSocket->disconnectFromHost();
 }
 
@@ -134,7 +135,7 @@ void Connection::readHost()
         emit receiveAction((game::user_action)messageInt);
 
     if(messageInt==5)
-        emit startGame();
+        emit startGameSignal();
 
 }
 

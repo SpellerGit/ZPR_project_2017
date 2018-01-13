@@ -28,7 +28,7 @@ private slots:
     void handleNewConnection();
 
 signals:
-    void startGame();
+    void startGameSignal();
     void receiveAction(game::user_action a);
 
 private:

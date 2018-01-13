@@ -72,14 +72,20 @@ void GameLoop::handleMovement()
 
 }
 
-void GameLoop::addNetUserAction(user_action a)
+void GameLoop::addNetUserAction(game::user_action a)
 {
     data->players[1]->setAction(a);
 }
 
-void GameLoop::setNetGame()
+void GameLoop::setConnection(std::shared_ptr<network::Connection> con)
 {
+    connection = con;
     netGame = true;
+    connect(connection.get(), SIGNAL(receiveAction(game::user_action)),
+            this, SLOT(addNetUserAction(game::user_action)));
+    connect(this, SIGNAL(sendUserAction(game::user_action)),
+            connection.get(), SLOT(sendAction(game::user_action)));
+
 }
 
 GameLoop::~GameLoop()

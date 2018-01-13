@@ -14,11 +14,11 @@ class GameManager : public QObject
 public:
     ~GameManager();
     void setConnection(std::shared_ptr<network::Connection> con);
-
-public slots:
-    void startGame();
     void startGame(std::shared_ptr<GameData> gamedata);
+    void startGame();
 
+private slots:
+    void showGame();
 
 private:
     void setupConnection();

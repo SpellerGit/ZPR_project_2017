@@ -22,12 +22,14 @@ void GameLobby::setConnection(std::shared_ptr<network::Connection> con)
 void GameLobby::hostGame()
 {
     qDebug() <<"hst";
+    this->hide();
     connection->host();
 }
 
 void GameLobby::joinGame()
 {
     qDebug() <<"jin " << ui->hostAdress->text() << " prt " <<ui->port->text().toInt();
+    this->hide();
     connection->joinHost(ui->hostAdress->text(),ui->port->text().toInt());
 }
 
