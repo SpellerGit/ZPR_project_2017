@@ -53,7 +53,8 @@ void GameLoop::handleMovement()
 
 
     if(!data->bullets.empty())
-    { qDebug() << " bullets number : " << data->bullets.size(); //delete later
+    {
+        //qDebug() << " bullets number : " << data->bullets.size(); //delete later // i delete now
         for(int i =0; i<data->bullets.size(); i++)
         {
             data->bullets[i]->move();

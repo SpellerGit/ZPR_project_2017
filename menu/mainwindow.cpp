@@ -55,8 +55,9 @@ void MainWindow::handleSelectMap()
 {
 
     mngr = std::unique_ptr<game::GameManager>(new game::GameManager());
-    gamedata = std::shared_ptr<game::GameData>(new game::GameData());
-    //selecting map
+    gamedata = std::shared_ptr<game::GameData>(new game::GameData()); // i used the overloaded contructor
+    gamedata->loadmap();
+
     qDebug() << "clicked SelectMap";
 
 }

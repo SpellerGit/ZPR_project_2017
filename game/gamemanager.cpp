@@ -28,7 +28,7 @@ void GameManager::startGame() // its loading test map
 
 }
 
-void GameManager::startGame(std::shared_ptr<game::GameData> gamedata)
+void GameManager::startGame(std::shared_ptr<game::GameData> gamedata) // version which use selected map
 {
 
     qDebug() << "to make loop";
