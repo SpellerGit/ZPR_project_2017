@@ -76,14 +76,19 @@ void movingItem::releaseAction(user_action a)
     //This can be done better i think xd
     //Also using vector in this case is
     //rather not the best. Use list instead?
+    bool found = false;
     int j =0;
     for(auto &i : actions)
     {
         if(*i==a)
+        {
+            found = true;
             break;
+        }
         j++;
     }
-    actions.erase(actions.begin()+j);
+    if(found)
+        actions.erase(actions.begin()+j);
 
 }
 

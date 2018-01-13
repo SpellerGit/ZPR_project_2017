@@ -18,7 +18,7 @@ public:
     void startGame();
 
 private slots:
-    void showGame();
+    void showGame(QString type);
 
 private:
     void setupConnection();

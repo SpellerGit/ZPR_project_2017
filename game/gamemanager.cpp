@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <functional>
 #include <QThreadPool>
-#include <Windows.h>
+#include <algorithm>
 
 namespace game {
 
@@ -48,19 +48,33 @@ void GameManager::setConnection(std::shared_ptr<network::Connection> con)
     gamewindow->setData(gamedata);
 
     loop = new GameLoop(gamedata,gamewindow);
-    loop->setConnection(con);
+    loop->setConnection();
     connection = con;
     setupConnection();
 }
 
 void GameManager::setupConnection()
 {
-    connect(connection.get(), SIGNAL(startGameSignal()),
-            this, SLOT(showGame()));
+    connect(connection.get(), SIGNAL(startGameSignal(QString)),
+            this, SLOT(showGame(QString)));
+
+    connect(connection.get(), SIGNAL(receiveAction(game::user_action)),
+            loop, SLOT(addNetUserAction(game::user_action)));
+
+    connect(gamewindow, SIGNAL(sendUserAction(game::user_action)),
+            connection.get(), SLOT(sendAction(game::user_action)));
 }
 
-void GameManager::showGame()
+void GameManager::showGame(QString type)
 {
+    qDebug() << "showing da game as " <<type;
+    if(type=="CLIENT")
+    {
+        auto tmp = gamedata->players[0];
+        gamedata->players.erase(gamedata->players.begin());
+        gamedata->players.push_back(tmp);
+    }
+    qDebug() << "xdd";
     gamewindow->show();
 }
 

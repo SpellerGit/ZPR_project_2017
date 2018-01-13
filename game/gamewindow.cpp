@@ -231,12 +231,15 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                 {
                     case Qt::Key_A:
                          gdata->players[0]->setAction(MOVE_LEFT);
+                         emit sendUserAction(MOVE_LEFT);
                          break;
                     case Qt::Key_D:
                          gdata->players[0]->setAction(MOVE_RIGHT);
+                         emit sendUserAction(MOVE_RIGHT);
                          break;
                     case Qt::Key_Space:
                          gdata->players[0]->setAction(JUMP);
+                         emit sendUserAction(JUMP);
                          break;
 
                     /*case Qt::Key_Left:
@@ -261,12 +264,15 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                 {
                     case Qt::Key_A:
                          gdata->players[0]->releaseAction(MOVE_LEFT);
+                         emit sendUserAction(RELEASE_LEFT);
                          break;
                     case Qt::Key_D:
                          gdata->players[0]->releaseAction(MOVE_RIGHT);
+                         emit sendUserAction(RELEASE_RIGHT);
                          break;
                     case Qt::Key_Space:
                          gdata->players[0]->releaseAction(JUMP);
+                         emit sendUserAction(RELEASE_JUMP);
                          break;
 
                    /* case Qt::Key_Left:

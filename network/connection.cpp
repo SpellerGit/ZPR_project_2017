@@ -78,7 +78,7 @@ void Connection::handleNewConnection()
      QDataStream out(&block, QIODevice::WriteOnly);
      out.setVersion(QDataStream::Qt_5_9);
 
-     QString sendIt("5");
+     QString sendIt("10");
 
      qDebug()<<"will now send " <<sendIt;
 
@@ -96,7 +96,7 @@ void Connection::handleNewConnection()
      tcpSocket->write(block);
 
      qDebug()<<"will now emit start game signal";
-     emit startGameSignal();
+     emit startGameSignal("HOST");
      //tcpSocket->disconnectFromHost();
 }
 
@@ -131,11 +131,11 @@ void Connection::readHost()
     qDebug() << message;
 
     int messageInt = message.toInt();
-    if(messageInt>=0 || messageInt<=4)
+    if(messageInt>=0 && messageInt<=7)
         emit receiveAction((game::user_action)messageInt);
 
-    if(messageInt==5)
-        emit startGameSignal();
+    if(messageInt==10)
+        emit startGameSignal(QString("CLIENT"));
 
 }
 

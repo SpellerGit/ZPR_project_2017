@@ -28,7 +28,7 @@ private slots:
     void handleNewConnection();
 
 signals:
-    void startGameSignal();
+    void startGameSignal(QString type);
     void receiveAction(game::user_action a);
 
 private:

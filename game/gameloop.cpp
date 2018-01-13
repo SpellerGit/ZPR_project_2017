@@ -22,10 +22,6 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
 
 void GameLoop::run()
 {
-    if(netGame)
-        for(int i =0; i<data->players[0]->actions.size(); i++)
-            emit sendUserAction(*data->players[0]->actions[i]);
-
     for(auto j : data->players)
         if(!j->actions.empty())
             for(auto &i : j->actions)
@@ -45,7 +41,7 @@ void GameLoop::run()
                     default:
                         break;
                 }
-
+        //data->players[1]->actions.clear();
         emit loopSignal();
         handleMovement(); //is that not risky (rw conflict) to do that in this async way?
 
@@ -74,18 +70,20 @@ void GameLoop::handleMovement()
 
 void GameLoop::addNetUserAction(game::user_action a)
 {
+    qDebug() <<"ADD action " <<a;
+    if(a == RELEASE_JUMP)
+        data->players[1]->releaseAction(JUMP);
+    else if(a == RELEASE_LEFT)
+        data->players[1]->releaseAction(MOVE_LEFT);
+    else if(a == RELEASE_RIGHT)
+        data->players[1]->releaseAction(MOVE_RIGHT);
+    else
     data->players[1]->setAction(a);
 }
 
-void GameLoop::setConnection(std::shared_ptr<network::Connection> con)
+void GameLoop::setConnection()
 {
-    connection = con;
     netGame = true;
-    connect(connection.get(), SIGNAL(receiveAction(game::user_action)),
-            this, SLOT(addNetUserAction(game::user_action)));
-    connect(this, SIGNAL(sendUserAction(game::user_action)),
-            connection.get(), SLOT(sendAction(game::user_action)));
-
 }
 
 GameLoop::~GameLoop()

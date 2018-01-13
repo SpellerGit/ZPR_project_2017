@@ -18,17 +18,15 @@ public:
     GameLoop(std::shared_ptr<GameData> gamedata,
              GameWindow * gamewindow);
     ~GameLoop();
-    void setConnection(std::shared_ptr<network::Connection> con);
+    void setConnection();
 
 public slots:
     void addNetUserAction(game::user_action a);
 
 signals:
    void loopSignal();
-   void sendUserAction(game::user_action a);
 
 private:
-    std::shared_ptr<network::Connection> connection;
     std::shared_ptr<GameData> data;
     GameWindow * gamewindow;
     void handleMovement();
