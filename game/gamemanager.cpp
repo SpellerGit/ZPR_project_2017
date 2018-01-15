@@ -70,9 +70,9 @@ void GameManager::showGame(QString type)
     qDebug() << "showing da game as " <<type;
     if(type=="CLIENT")
     {
-        auto tmp = gamedata->players[0];
-        gamedata->players.erase(gamedata->players.begin());
-        gamedata->players.push_back(tmp);
+        auto tmp = gamedata->getPlayers()[0];
+        gamedata->getPlayers().erase(gamedata->getPlayers().begin());
+        gamedata->getPlayers().push_back(tmp);
     }
     qDebug() << "xdd";
     gamewindow->show();

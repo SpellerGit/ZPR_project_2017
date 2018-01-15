@@ -98,6 +98,31 @@ i=0;
 
 }
 
+std::vector<movingItem*> GameData::getPlayers() const
+{
+    return players;
+}
+
+std::vector<movingItem*> GameData::getBullets() const
+{
+    return bullets;
+}
+
+std::vector<mapItem*> GameData::getTiles() const
+{
+    return tiles;
+}
+
+void GameData::insertBullet(movingItem *bullet)
+{
+    bullets.push_back(bullet);
+}
+
+void GameData::removeBullet(int index)
+{
+    bullets.erase(bullets.begin()+index);
+}
+
 movingItem* GameData::addBullet(int shootPointX,
                                 int shootPointY,
                                 int playerNumer)
@@ -143,7 +168,6 @@ movingItem* GameData::addBullet(int shootPointX,
         float ratio2 = players[playerNumer]->boundingRect().height()/abs(speedy);
         bullet->setPos(middle.x()+speedx*ratio2,middle.y()+speedy*ratio2);
     }
-
     return bullet;
 
 }
