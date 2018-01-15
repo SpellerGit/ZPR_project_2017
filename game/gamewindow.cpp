@@ -199,8 +199,8 @@ QGraphicsScene * GameWindow::getScenePointer() const
 void GameWindow::setData(std::shared_ptr<GameData> gamedata)
 {
     gdata = gamedata;
-
-    ui->gameView->setBackgroundBrush(QPixmap(":/images/background1.bmp"));
+    ui->gameView->setBackgroundBrush(QPixmap(gdata->background));
+    qDebug() << gdata->background;
     for(auto i : gdata->getPlayers())
     scene->addItem(i);
 
@@ -208,6 +208,7 @@ void GameWindow::setData(std::shared_ptr<GameData> gamedata)
     {
         scene->addItem(i);
         i->setPos(i->posX,i->posY);
+        qDebug() << " Tile added, possition X :" << i->posX << " possition Y: "<< i->posY;
     }
 }
 

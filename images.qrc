@@ -5,6 +5,7 @@
         <file>images/image3.png</file>
 		<file>images/bullet.png</file>
 		<file>images/background1.bmp</file>
+		<file>images/background2.bmp</file>
 		<file>images/tile1.bmp</file>
     </qresource>
 </RCC>

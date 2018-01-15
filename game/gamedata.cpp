@@ -3,6 +3,11 @@
 #include <QPixmap>
 #include <QDebug>
 #include <math.h>
+#include <QFile>
+#include <QFileDialog>
+#include <QString>
+#include <QMessageBox>
+
 
 namespace game {
 /* This class will be keeping whole the game data, and
@@ -11,7 +16,7 @@ namespace game {
 GameData::GameData()
 {
    QImage image(":/images/image3.png");
-   auto player = new movingItem();
+   auto player = new movingItem(0,0,200,250);
    player->setPixmap(QPixmap::fromImage(image));
    player->hitPoints=100;
 
@@ -21,6 +26,7 @@ GameData::GameData()
    player2->setPixmap(QPixmap::fromImage(image));
 
    players.push_back(player2);
+
 
 
    QImage image3(":/images/tile1.bmp");
@@ -98,6 +104,7 @@ i=0;
 
 }
 
+
 std::vector<movingItem*> GameData::getPlayers() const
 {
     return players;
@@ -122,6 +129,132 @@ void GameData::removeBullet(int index)
 {
     bullets.erase(bullets.begin()+index);
 }
+
+
+void GameData::loadmap(){
+
+    // Destroying previous map set
+       players.clear();
+       tiles.clear();
+       bullets.clear();
+
+    // Opening map file, getting map height, objects to add etc.
+       QString fileName = QFileDialog::getOpenFileName(this, "Open the file");
+       QFile file(fileName);
+       if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+           QMessageBox::warning(this,"..","File not opened.");
+           return;
+       }
+       QTextStream in(&file);
+       QString text = in.readAll(); // whole file is saved as one row with \n symbols
+       file.close();
+
+       int mapHeight, mapWidth, itemPositionX, itemPositionY;
+       int index = text.indexOf("\n",0);
+       QString map = text.left(index);
+       index += 1; // moving index to next row. First row purpose is to select bacground
+
+
+       mapWidth = text.indexOf("\n",index); /// map withd is countig from 0
+       mapWidth= mapWidth - index; // we get true width of the map
+       qDebug() << mapWidth;
+       mapHeight = text.count("\n");
+       qDebug() << mapHeight;
+
+       text.remove("\n");
+       text.remove(map);
+
+       qDebug() << text; // will use that later -> to add new tiles to the map
+
+
+       QString path = ":/images/";
+               path.append(map);
+
+               background.replace(0,100,path);
+               qDebug() << background;
+
+       QImage picture(path);
+
+
+       // Here we can modify or add new tiles type
+       // # - regular tile , % - nothing for now, X - player position soon
+
+       char element [] = {'#' , 'X', };
+
+                                QImage standardTile(":/images/tile1.bmp");         // tile image -> #
+                                QImage playerImage(":/images/image3.png");     // player image ->X
+
+
+                                auto player = new movingItem(0,0,200,250);    // Setting possition of first player
+                                player->setPixmap(QPixmap::fromImage(playerImage));
+                                player->hitPoints=100;
+
+                                players.push_back(player);
+
+                                auto player2 = new movingItem(0,0,200,200,100); //aka the cpu player
+                                player2->setPixmap(QPixmap::fromImage(playerImage));
+
+                                players.push_back(player2); // for testing
+
+
+
+       for(int i = 0; i < sizeof(element); i++)
+       {
+               int possition = 0;
+               int zmienna = 0;
+
+               switch( element[i] )
+               {
+                   case '#':
+                       for(int j=0; j<text.size();j++) // size of map
+                       {
+                           int Scale = 50;
+                         //  qDebug() << "possition " << j << ": " << possition << " and text.size : " << text.size() ;
+
+
+
+                           possition = text.indexOf("#",possition) ; // same as before , we are getting true possition of map
+                           if(possition == -1)
+                           {qDebug() <<"no more tiles!";
+                               break;
+                           }
+                           zmienna = possition;
+
+                           qDebug() << " possition issues : " << zmienna<< " and index: "<< index;
+
+                          int Xpossition =(zmienna) % mapWidth;
+                          int Ypossition =((zmienna) + (mapWidth - Xpossition))/mapWidth;  // getting possition of tiles. must scale to poin 0,0 so i use "- index" which contanins size of first line
+
+                           qDebug() << "new tile in collection pos X, Y : " << Xpossition << ", "<< Ypossition;
+                           mapItem * tile = new movingItem();
+                           tile->setPixmap(QPixmap::fromImage(standardTile)); // posX is starting from 0 , so i will decrease Xpossition and Ypossition
+                           tile->posX= (Xpossition ) * Scale;
+                           tile->posY= (Ypossition ) * Scale;
+                           tiles.push_back(tile);
+
+                           possition = possition + 1;
+
+                       }
+                       break;
+
+                   case 'X':   // Other players possition.
+                        for(int j=0; j<text.size();j++)
+                        {
+
+                           break;
+                         }
+                        break;
+
+                   default:
+                       break;
+                      //
+               }
+       }
+}
+
+
+
+
 
 movingItem* GameData::addBullet(int shootPointX,
                                 int shootPointY,
