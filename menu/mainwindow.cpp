@@ -32,7 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(ui->button1, SIGNAL (released()), this, SLOT (handleButton()));
     QObject::connect(ui->button2, SIGNAL (released()), this, SLOT (handleSelectMap()));
+    QObject::connect(ui->hostbutton, SIGNAL (released()), this, SLOT (handleNetwork()));
 
+    connection = std::shared_ptr<network::Connection>(new network::Connection());
 
 }
 
@@ -62,8 +64,20 @@ void MainWindow::handleSelectMap()
 
 }
 
+void MainWindow::handleNetwork()
+{
+    this->hide();
+    mngr = std::unique_ptr<game::GameManager>(new game::GameManager());
+    mngr->setConnection(connection);
+    lobby = std::unique_ptr<GameLobby>(new GameLobby());
+    lobby->setConnection(connection);
+}
+
+
 MainWindow::~MainWindow()
 {
      qDebug() << "dstry main";
      delete ui;
 }
+
+

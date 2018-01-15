@@ -11,7 +11,8 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
                    GameWindow * gamewindpow_ptr)
             : data(gamedata), gamewindow(gamewindpow_ptr)
 {
-    connect(this, SIGNAL(mySignal()),
+    netGame = false;
+    connect(this, SIGNAL(loopSignal()),
             gamewindow, SLOT(updateDisplay()));
 
     QTimer *timer = new QTimer(this);
@@ -21,7 +22,7 @@ GameLoop::GameLoop(std::shared_ptr<GameData> gamedata,
 
 void GameLoop::run()
 {
-    for(auto j : data->players)
+    for(auto j : data->getPlayers())
         if(!j->actions.empty())
             for(auto &i : j->actions)
                 switch(*i)
@@ -40,32 +41,49 @@ void GameLoop::run()
                     default:
                         break;
                 }
-
-        emit mySignal();
+        //data->players[1]->actions.clear();
+        emit loopSignal();
         handleMovement(); //is that not risky (rw conflict) to do that in this async way?
 
 }
 
 void GameLoop::handleMovement()
 {
-    for(auto &i : data->players)
+    for(auto &i : data->getPlayers())
     i->move();
 
 
-    if(!data->bullets.empty())
+    if(!data->getBullets().empty())
     {
-        //qDebug() << " bullets number : " << data->bullets.size(); //delete later // i delete now
-        for(int i =0; i<data->bullets.size(); i++)
+        for(int i =0; i<data->getBullets().size(); i++)
         {
-            data->bullets[i]->move();
+            data->getBullets()[i]->move();
             //delete objects if they go too far
-            if(data->bullets[i]->x()>10000 || data->bullets[i]->x()<-500
-                    || data->bullets[i]->y()>10000 || data->bullets[i]->y()<-5000
-                    || data->bullets[i]->hitPoints<=0)
-            data->bullets.erase(data->bullets.begin()+i);
+            if(data->getBullets()[i]->x()>10000 || data->getBullets()[i]->x()<-500
+                    || data->getBullets()[i]->y()>10000 || data->getBullets()[i]->y()<-5000
+                    || data->getBullets()[i]->hitPoints<=0)
+            data->removeBullet(i);
         }
     }
 
+}
+
+void GameLoop::addNetUserAction(game::user_action a)
+{
+    qDebug() <<"ADD action " <<a;
+    if(a == RELEASE_JUMP)
+        data->getPlayers()[1]->releaseAction(JUMP);
+    else if(a == RELEASE_LEFT)
+        data->getPlayers()[1]->releaseAction(MOVE_LEFT);
+    else if(a == RELEASE_RIGHT)
+        data->getPlayers()[1]->releaseAction(MOVE_RIGHT);
+    else
+    data->getPlayers()[1]->setAction(a);
+}
+
+void GameLoop::setConnection()
+{
+    netGame = true;
 }
 
 GameLoop::~GameLoop()

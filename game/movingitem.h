@@ -10,7 +10,10 @@ enum user_action {
         MOVE_RIGHT,
         JUMP,
         SHOOT,
-        IDLE
+        IDLE,
+        RELEASE_LEFT,
+        RELEASE_RIGHT,
+        RELEASE_JUMP
 };
 
 class movingItem : public mapItem

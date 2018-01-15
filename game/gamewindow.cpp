@@ -22,7 +22,6 @@ GameWindow::GameWindow(QWidget *parent) :
 
     scene->installEventFilter(this);
     QObject::connect(ui->exitButton, SIGNAL (released()), this, SLOT (handleExit()));
-
 }
 
 void GameWindow::updateDisplay()
@@ -32,7 +31,7 @@ void GameWindow::updateDisplay()
     // gdata->players[i]->setPos(gdata->players[i]->posX,gdata->players[i]->posY);
 
 
-     ui->gameView->centerOn(gdata->players[0]);
+     ui->gameView->centerOn(gdata->getPlayers()[0]);
 
 }
 
@@ -40,7 +39,7 @@ void GameWindow::checkCollisions()
 {
    // qDebug() << "check with x speed " << gdata->players[i]->speedX ;
 
-    for(auto &j : gdata->players)
+    for(auto &j : gdata->getPlayers())
     {
         float vx = (float)j->speedX;    //nice cast btw
         float vy = (float)j->speedY;
@@ -129,8 +128,8 @@ void GameWindow::checkCollisions()
 
 
     // qDebug() << "check with x speed " << j->speedX ;
-    if(!gdata->bullets.empty())
-        for(auto &i : gdata->bullets)
+    if(!gdata->getBullets().empty())
+        for(auto &i : gdata->getBullets())
         {
             float vx = (float)i->speedX;    //nice cast btw
             float vy = (float)i->speedY;
@@ -200,14 +199,12 @@ QGraphicsScene * GameWindow::getScenePointer() const
 void GameWindow::setData(std::shared_ptr<GameData> gamedata)
 {
     gdata = gamedata;
-
-
     ui->gameView->setBackgroundBrush(QPixmap(gdata->background));
     qDebug() << gdata->background;
-    for(auto i : gdata->players)
+    for(auto i : gdata->getPlayers())
     scene->addItem(i);
 
-    for(auto &i : gdata->tiles)
+    for(auto &i : gdata->getTiles())
     {
         scene->addItem(i);
         i->setPos(i->posX,i->posY);
@@ -234,23 +231,26 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                 switch (key->key())
                 {
                     case Qt::Key_A:
-                         gdata->players[0]->setAction(MOVE_LEFT);
+                         gdata->getPlayers()[0]->setAction(MOVE_LEFT);
+                         emit sendUserAction(MOVE_LEFT);
                          break;
                     case Qt::Key_D:
-                         gdata->players[0]->setAction(MOVE_RIGHT);
+                         gdata->getPlayers()[0]->setAction(MOVE_RIGHT);
+                         emit sendUserAction(MOVE_RIGHT);
                          break;
                     case Qt::Key_Space:
-                         gdata->players[0]->setAction(JUMP);
+                         gdata->getPlayers()[0]->setAction(JUMP);
+                         emit sendUserAction(JUMP);
                          break;
 
                     case Qt::Key_Left:
-                         gdata->players[1]->setAction(MOVE_LEFT);
+                         gdata->getPlayers()[1]->setAction(MOVE_LEFT);
                          break;
                     case Qt::Key_Right:
-                         gdata->players[1]->setAction(MOVE_RIGHT);
+                         gdata->getPlayers()[1]->setAction(MOVE_RIGHT);
                          break;
                     case Qt::Key_Up:
-                         gdata->players[1]->setAction(JUMP);
+                         gdata->getPlayers()[1]->setAction(JUMP);
                          break;
 
                     default:
@@ -264,23 +264,26 @@ bool GameWindow::eventFilter(QObject *target, QEvent *event)
                 switch (key->key())
                 {
                     case Qt::Key_A:
-                         gdata->players[0]->releaseAction(MOVE_LEFT);
+                         gdata->getPlayers()[0]->releaseAction(MOVE_LEFT);
+                         emit sendUserAction(RELEASE_LEFT);
                          break;
                     case Qt::Key_D:
-                         gdata->players[0]->releaseAction(MOVE_RIGHT);
+                         gdata->getPlayers()[0]->releaseAction(MOVE_RIGHT);
+                         emit sendUserAction(RELEASE_RIGHT);
                          break;
                     case Qt::Key_Space:
-                         gdata->players[0]->releaseAction(JUMP);
+                         gdata->getPlayers()[0]->releaseAction(JUMP);
+                         emit sendUserAction(RELEASE_JUMP);
                          break;
 
                     case Qt::Key_Left:
-                         gdata->players[1]->releaseAction(MOVE_LEFT);
+                         gdata->getPlayers()[1]->releaseAction(MOVE_LEFT);
                          break;
                     case Qt::Key_Right:
-                         gdata->players[1]->releaseAction(MOVE_RIGHT);
+                         gdata->getPlayers()[1]->releaseAction(MOVE_RIGHT);
                          break;
                     case Qt::Key_Up:
-                         gdata->players[1]->releaseAction(JUMP);
+                         gdata->getPlayers()[1]->releaseAction(JUMP);
                          break;
 
                     default:
@@ -302,7 +305,8 @@ void GameWindow::shoot(QGraphicsSceneMouseEvent* event,
     const QPointF position = event ->scenePos();
     movingItem * bullet = gdata->addBullet(position.x(),position.y(),playerNumber); //shoudl this be here
     scene->addItem(bullet);
-    gdata->bullets.push_back(bullet);
+    gdata->insertBullet(bullet);
+    qDebug()<<"blts : " <<gdata->getBullets().size();
 }
 
 void GameWindow::handleExit()

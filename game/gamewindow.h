@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QGraphicsPixmapItem>
 #include "game/gamedata.h"
+#include "network/connection.h"
 
 namespace Ui {
 class GameWindow;
@@ -24,6 +25,9 @@ public:
 public slots:
    void updateDisplay();
 
+signals:
+   void sendUserAction(game::user_action a);
+
 private slots:
    void handleExit();
 
@@ -33,6 +37,7 @@ private:
                int playerNumber);
     bool eventFilter(QObject *target, QEvent *event);
 
+    std::shared_ptr<network::Connection> connection;
     std::shared_ptr<GameData> gdata;
     QGraphicsScene * scene;
     Ui::GameWindow *ui;

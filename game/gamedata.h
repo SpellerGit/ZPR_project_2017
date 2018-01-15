@@ -9,8 +9,10 @@
 
 namespace game{
 
-/*Class that contains all the information about current game
- seession used by gamewindow and gameloop */
+/**
+ * Class that contains all the information about current game
+ * seession used by gamewindow and gameloop
+ */
 class GameData : public QWidget
 {
 public:
@@ -21,8 +23,13 @@ public:
     movingItem* addBullet(int x,
                           int y,
                           int playerNumber);
+    void insertBullet(movingItem * bullet);
+    void removeBullet(int index);
+    std::vector<movingItem*> getPlayers() const;
+    std::vector<movingItem*> getBullets() const;
+    std::vector<mapItem*> getTiles() const;
 
-//private: //public only for early testing/developing
+private:
     std::vector<movingItem*> players;
     std::vector<mapItem*> tiles;
     std::vector<movingItem*> bullets;

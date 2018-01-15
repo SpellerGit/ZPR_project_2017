@@ -17,39 +17,42 @@
    <widget class="QPushButton" name="button1">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>50</y>
+      <x>110</x>
+      <y>0</y>
       <width>161</width>
-      <height>171</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
-     <string>button1</string>
+     <string>Local game</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button2">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>140</y>
-      <width>80</width>
-      <height>25</height>
+      <x>110</x>
+      <y>180</y>
+      <width>161</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
      <string>Select Map</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>400</width>
-     <height>25</height>
-    </rect>
-   </property>
+   <widget class="QPushButton" name="hostbutton">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>90</y>
+      <width>161</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Online game</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

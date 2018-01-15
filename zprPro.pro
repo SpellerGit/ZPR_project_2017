@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,3 +28,4 @@ RESOURCES += images.qrc
 
 include(game/game.pri)
 include(menu/menu.pri)
+include(network/network.pri)
